@@ -9,7 +9,12 @@ import java.io.IOException;
 
 /** Starting point for the application. Contains main method. */
 public class Main extends Application {
-    /** Start method. Called by default by launching the application, starts the views the user sees. */
+    /** Start method. Called by default by launching the application, starts the views the user sees.
+     * -------------ERROR CORRECTED: Mistakenly had not put a closing bracket at the end of the start method. This caused
+     * the application not to compile. The error appeared on the main(String[] args) however. It took me a
+     * while to dig in and find where the actual error was. Eventually, I noticed the error wasn't on just one part
+     * of that line so assumed the error had to be further upp in the code before that line and I found the missing
+     * closing bracket. */
     @Override
     public void start(Stage stage) throws IOException {
         Parent window = FXMLLoader.load(getClass().getResource("/view/main_window.fxml"));
