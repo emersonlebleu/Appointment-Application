@@ -7,7 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.Locale;
 import java.util.TimeZone;
 
-/** An abstract class for the users local settings. */
+/** An abstract class for the users local settings. Includes the language and date/time information. */
 public abstract class Local {
     private static LocalDateTime dateTime;
 
@@ -18,11 +18,15 @@ public abstract class Local {
         return zone;
     }
 
+    /** Gets the language string of the default language.
+     * @return the string of the current default language. */
     public static String getLangString(){
         String lang = Locale.getDefault().getDisplayLanguage();
         return lang;
     }
 
+    /** Gets the language code string of the default language.
+     * @return the languge code of the current default language. */
     public static String getLangCode(){
         String langC = Locale.getDefault().getLanguage();
         return langC;
