@@ -1,8 +1,5 @@
 package utilities;
 
-import javafx.scene.control.Alert;
-import javafx.stage.StageStyle;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
