@@ -40,26 +40,24 @@ public class Login implements Initializable {
      * the appropriate labels to the string values for displaying. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String filename = "utilities/lang";
 
-        try {
+        if (Locale.getDefault().getLanguage().equals("fr")){
+            String filename = "utilities/lang";
             ResourceBundle rb = ResourceBundle.getBundle(filename, Locale.getDefault());
 
-            if (Locale.getDefault().getLanguage().equals("fr")){
-                usernameLabel.setText(rb.getString("username"));
-                passwordLabel.setText(rb.getString("password"));
-                tzLabel.setText(rb.getString("timezone"));
-                langLabel.setText(rb.getString("language"));
-                loginButton.setText(rb.getString("login"));
-            }
-        } catch (Exception e) {}
+            usernameLabel.setText(rb.getString("username"));
+            passwordLabel.setText(rb.getString("password"));
+            tzLabel.setText(rb.getString("timezone"));
+            langLabel.setText(rb.getString("language"));
+            loginButton.setText(rb.getString("login"));
+        }
 
         tzText.setText(Local.getZone().toString());
         langText.setText(Local.getLangString());
     }
 
     /** Login button pressed, gather username and password and validate against DB.
-     * Loads the main page if successfull displays error if not. */
+     * Loads the main page if successfull, displays error if not. */
     public void onLogin(ActionEvent actionEvent) throws SQLException, IOException {
         if (LoginQuery.findUser(usernameField.getText(), passwordField.getText())){
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/home.fxml")));
@@ -76,17 +74,13 @@ public class Login implements Initializable {
             alert.setHeaderText(null);
             alert.initStyle(StageStyle.UTILITY);
 
-            try {
+            if (Locale.getDefault().getLanguage().equals("fr")){
                 String filename = "utilities/lang";
                 ResourceBundle rb = ResourceBundle.getBundle(filename, Locale.getDefault());
-
-                if (Locale.getDefault().getLanguage().equals("fr")){
-                    alert.setContentText(rb.getString("loginError"));
-                }
-            } catch (Exception e) {
+                alert.setContentText(rb.getString("loginError"));
+            } else {
                 alert.setContentText("Sorry, Username/Password combination not found.");
             }
-
             alert.showAndWait();
         }
     }
