@@ -18,7 +18,6 @@ public abstract class JDBC {
         try {
             Class.forName(driver);
             conn = DriverManager.getConnection(dbURL, username, password);
-            System.out.println("Connected");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -27,7 +26,6 @@ public abstract class JDBC {
     public static void disconnect() {
         try {
             conn.close();
-            System.out.println("Closed");
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }

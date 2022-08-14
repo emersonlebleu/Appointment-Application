@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Objects;
 
 /** Starting point for the application. Contains main method. */
@@ -20,15 +21,17 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         Parent window = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/login.fxml")));
 
-        stage.setTitle("Login");
-        Scene mainScene = new Scene(window, 400, 280);
-        stage.setScene(mainScene);
+        stage.setTitle("");
+        Scene login = new Scene(window, 400, 280);
+        stage.setScene(login);
         stage.setResizable(false);
 
         stage.show();
     }
 
     public static void main(String[] args) {
+//        Locale.setDefault(new Locale("fr"));
+
         JDBC.connect();
         launch();
         JDBC.disconnect();
