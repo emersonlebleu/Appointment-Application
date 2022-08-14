@@ -1,4 +1,4 @@
-import data.JDBC;
+import utilities.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

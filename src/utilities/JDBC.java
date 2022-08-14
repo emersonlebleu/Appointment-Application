@@ -1,8 +1,7 @@
-package data;
+package utilities;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 /** Class to open and close the DB connection. Private variables for the URL, username and password are created along
  * with the driver and a new Connection variable conn. Class contains the "connect" and "disconnect" methods */
