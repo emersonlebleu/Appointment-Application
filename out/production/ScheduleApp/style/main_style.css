@@ -1,0 +1,36 @@
+#mainCanvas {
+    -fx-background-color: #FFFCF7;
+}
+
+#nav {
+    -fx-background-color: #1F2232;
+    -fx-text-fill: #FFFCF7;
+    -fx-font-weight: bold;
+}
+#header {
+    -fx-background-color: #3F4464;
+    -fx-text-fill: #FFFCF7;
+    -fx-font-weight: bold;
+}
+
+Label {
+    -fx-text-fill: inherit;
+}
+
+Button {
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-background-color: #3F4464;
+    -fx-text-fill: #FFFCF7;
+}
+
+#appTitle {
+    -fx-font-family: system;
+    -fx-font-size: 16pt;
+}
+
+#pageLabel {
+    -fx-font-family: system;
+    -fx-font-size: 16pt;
+}
+

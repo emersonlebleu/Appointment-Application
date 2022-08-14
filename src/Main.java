@@ -30,7 +30,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        Locale.setDefault(new Locale("fr"));
+//        Locale.setDefault(new Locale("fr"));
 
         JDBC.connect();
         launch();
