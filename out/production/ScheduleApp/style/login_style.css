@@ -1,0 +1,20 @@
+AnchorPane {
+    -fx-background-color: #1F2232;
+}
+
+Label {
+    -fx-text-fill: #FFFCF7;
+    -fx-font-weight: bold;
+}
+
+TextField {
+    -fx-text-fill: #1F2232;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFFCF7;
+}
+
+Button {
+    -fx-background-color: #ED9B40;
+    -fx-text-fill: #1F2232;
+    -fx-font-weight: bold;
+}

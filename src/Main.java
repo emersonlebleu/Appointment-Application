@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /** Starting point for the application. Contains main method. */
 public class Main extends Application {
@@ -17,10 +18,13 @@ public class Main extends Application {
      * closing bracket. */
     @Override
     public void start(Stage stage) throws IOException {
-        Parent window = FXMLLoader.load(getClass().getResource("/view/main_window.fxml"));
+        Parent window = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/login.fxml")));
 
-        stage.setTitle("Main");
-        stage.setScene(new Scene(window, 800, 600));
+        stage.setTitle("Login");
+        Scene mainScene = new Scene(window, 400, 280);
+        stage.setScene(mainScene);
+        stage.setResizable(false);
+
         stage.show();
     }
 
