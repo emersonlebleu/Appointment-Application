@@ -12,10 +12,10 @@
       <AnchorPane id="nav" fx:id="nav" prefHeight="600.0" prefWidth="138.0">
          <children>
             <Label layoutX="20.0" layoutY="57.0" prefHeight="17.0" prefWidth="86.0" text="Welcome," />
-            <Label alignment="CENTER" layoutX="32.0" layoutY="74.0" prefHeight="17.0" prefWidth="86.0" text="Default" />
-            <Button layoutX="13.0" layoutY="216.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Appointments" />
-            <Button layoutX="13.0" layoutY="284.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Customers" />
-            <Button layoutX="13.0" layoutY="352.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" text="Reports" />
+            <Label fx:id="userNameLabel" alignment="CENTER" layoutX="32.0" layoutY="74.0" prefHeight="17.0" prefWidth="86.0" text="Default" />
+            <Button fx:id="apptButton" layoutX="13.0" layoutY="216.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" onAction="#apptBtnPress" onMouseEntered="#mouseOvAppt" onMouseExited="#mouseOutApt" text="Appointments" />
+            <Button fx:id="custButton" layoutX="13.0" layoutY="284.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" onAction="#custBtnPress" onMouseEntered="#mouseOvCust" onMouseExited="#mouseOutCust" text="Customers" />
+            <Button fx:id="reportButton" layoutX="13.0" layoutY="352.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="112.0" onAction="#reportBtnPress" onMouseEntered="#mouseOvReport" onMouseExited="#mouseOutReport" text="Reports" />
          </children>
       </AnchorPane>
       <StackPane id="stackPane" fx:id="stackPane" layoutX="137.0" layoutY="47.0" prefHeight="553.0" prefWidth="663.0">
@@ -32,7 +32,7 @@
                   <Font name="Verdana Bold" size="18.0" />
                </font>
             </Label>
-            <Label id="pageLabel" fx:id="pageLabel" alignment="CENTER" layoutX="452.0" layoutY="11.0" prefHeight="23.0" prefWidth="234.0" text="Page">
+            <Label id="pageLabel" fx:id="pageLabel" alignment="CENTER" layoutX="452.0" layoutY="11.0" prefHeight="23.0" prefWidth="234.0" text="Appointments">
                <font>
                   <Font name="Verdana Bold" size="18.0" />
                </font>
