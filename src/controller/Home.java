@@ -33,7 +33,7 @@ public class Home implements Initializable {
      * sets the active page indication on button. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        userNameLabel.setText(Login.getUser());
+        userNameLabel.setText(Login.currUser.getName());
         apptButton.setStyle("-fx-background-color: #8E94B8;");
     }
 

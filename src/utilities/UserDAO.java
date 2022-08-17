@@ -36,7 +36,7 @@ public abstract class UserDAO {
      * @param username username.
      * @param password password.
      * @return an integer the ID if found otherwise null */
-    public Integer getUserId(String username, String password) throws SQLException {
+    public static Integer getUserId(String username, String password) throws SQLException {
         Integer id = null;
 
         String sql = "SELECT User_ID FROM users WHERE User_Name = ? AND Password = ?";
@@ -54,7 +54,7 @@ public abstract class UserDAO {
     /** Attempts to find a user in the db by ID.
      * @param id the id of the record to find.
      * @return a user object */
-    public model.User getUser(Integer id) throws SQLException{
+    public static model.User getUser(Integer id) throws SQLException{
         String sql = "SELECT User_ID, User_Name, Password FROM users WHERE User_ID = ?";
         model.User user = null;
 

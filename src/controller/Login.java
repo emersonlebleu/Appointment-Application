@@ -35,9 +35,9 @@ public class Login implements Initializable {
     public Label tzText;
     public Label langText;
 
-    public static String  userName;
-    public static String getUser(){
-        return userName;
+    public static model.User currUser;
+    public static model.User getUser(){
+        return currUser;
     }
 
     /** Initialize login, gets rb for french if the system language is French. Uses .properties to translate
@@ -65,7 +65,8 @@ public class Login implements Initializable {
      * Loads the main page if successfull, displays error if not. */
     public void onLogin(ActionEvent actionEvent) throws SQLException, IOException {
         if (UserDAO.validateUser(usernameField.getText(), passwordField.getText())){
-            userName = usernameField.getText();
+            Integer id = UserDAO.getUserId(usernameField.getText(), passwordField.getText());
+            currUser = UserDAO.getUser(id);
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/home.fxml")));
             Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
