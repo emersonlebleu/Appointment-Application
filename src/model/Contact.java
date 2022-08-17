@@ -2,36 +2,36 @@ package model;
 
 /** Model contact class */
 public class Contact {
-    private int contactId;
-    private String contactName;
+    private int id;
+    private String name;
     private String email;
 
     /** new contact instance method */
     public Contact(int contactId, String contactName, String email){
-        this.contactId = contactId;
-        this.contactName = contactName;
+        this.id = contactId;
+        this.name = contactName;
         this.email = email;
     }
 
     /** Get the id of the contact.
      * @return the id of the contact */
-    public int getContactId() {
-        return contactId;
+    public int getId() {
+        return id;
     }
     /** Set the id of the contact.
-     * @param contactId the id of the contact. */
-    public void setContactId(int contactId) {
-        this.contactId = contactId;
+     * @param id the id of the contact. */
+    public void setId(int id) {
+        this.id = id;
     }
     /** Get the name of the contact.
      * @return the name of the contact */
-    public String getContactName() {
-        return contactName;
+    public String getName() {
+        return name;
     }
     /** Set the name of the contact.
-     * @param contactName the name of the contact. */
-    public void setContactName(String contactName) {
-        this.contactName = contactName;
+     * @param name the name of the contact. */
+    public void setName(String name) {
+        this.name = name;
     }
     /** Get the email of the contact.
      * @return the email of the contact */
