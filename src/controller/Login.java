@@ -64,7 +64,7 @@ public class Login implements Initializable {
     /** Login button pressed, gather username and password and validate against DB.
      * Loads the main page if successfull, displays error if not. */
     public void onLogin(ActionEvent actionEvent) throws SQLException, IOException {
-        if (UserDAO.findUser(usernameField.getText(), passwordField.getText())){
+        if (UserDAO.validateUser(usernameField.getText(), passwordField.getText())){
             userName = usernameField.getText();
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/home.fxml")));
