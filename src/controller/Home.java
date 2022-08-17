@@ -27,42 +27,74 @@ public class Home implements Initializable {
     public Label appTitle;
     public Label pageLabel;
 
-    /** Window initializer called when window is loaded. */
+    private static String startStyle;
+
+    /** Initializer called when page is loaded. Changes username label to username from login.
+     * sets the active page indication on button. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("Main Initialized");
+        userNameLabel.setText(Login.getUser());
+        apptButton.setStyle("-fx-background-color: #8E94B8;");
     }
 
+    /** Appointment button pressed. Brings appropriate frame to front, changes page label, sets
+     * button styles appropriately to display active current page via button color. */
     public void apptBtnPress(ActionEvent actionEvent) {
         appointmentsPane.toFront();
         pageLabel.setText("Appointments");
+        reportButton.setStyle("-fx-background-color: #3F4464;");
+        custButton.setStyle("-fx-background-color: #3F4464;");
+        apptButton.setStyle("-fx-background-color: #8E94B8;");
+        startStyle = apptButton.getStyle();
     }
-
+    /** Customers button pressed. Brings appropriate frame to front, changes page label, sets
+     * button styles appropriately to display active current page via button color. */
     public void custBtnPress(ActionEvent actionEvent) {
         contactsPane.toFront();
         pageLabel.setText("Contacts");
-    }
 
+        apptButton.setStyle("-fx-background-color: #3F4464;");
+        reportButton.setStyle("-fx-background-color: #3F4464;");
+        custButton.setStyle("-fx-background-color: #8E94B8;");
+        startStyle = custButton.getStyle();
+    }
+    /** Report button pressed. Brings appropriate frame to front, changes page label, sets
+     * button styles appropriately to display active current page via button color. */
     public void reportBtnPress(ActionEvent actionEvent) {
         reportsPane.toFront();
+
         pageLabel.setText("Reports");
-    }
 
+        custButton.setStyle("-fx-background-color: #3F4464;");
+        apptButton.setStyle("-fx-background-color: #3F4464;");
+        reportButton.setStyle("-fx-background-color: #8E94B8;");
+        startStyle = reportButton.getStyle();
+    }
+    /** Mouse over gets current style & changes color of button. */
     public void mouseOvAppt(MouseEvent mouseEvent) {
+        startStyle = apptButton.getStyle();
+        apptButton.setStyle("-fx-background-color: #2F334B;");
     }
-
+    /** Mouse out changes color of button back to initial style. */
     public void mouseOutApt(MouseEvent mouseEvent) {
+        apptButton.setStyle(startStyle);
     }
-
+    /** Mouse over gets current style & changes color of button. */
     public void mouseOvCust(MouseEvent mouseEvent) {
+        startStyle = custButton.getStyle();
+        custButton.setStyle("-fx-background-color: #2F334B;");
     }
-
+    /** Mouse out changes color of button back to initial style. */
     public void mouseOutCust(MouseEvent mouseEvent) {
+        custButton.setStyle(startStyle);
     }
-
+    /** Mouse over gets current style & changes color of button. */
     public void mouseOvReport(MouseEvent mouseEvent) {
+        startStyle = reportButton.getStyle();
+        reportButton.setStyle("-fx-background-color: #2F334B;");
     }
-
+    /** Mouse out changes color of button back to initial style. */
     public void mouseOutReport(MouseEvent mouseEvent) {
+        reportButton.setStyle(startStyle);
     }
 }

@@ -14,7 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import utilities.Local;
-import utilities.LoginQuery;
+import utilities.UserDAO;
 
 import java.io.IOException;
 import java.net.URL;
@@ -34,6 +34,11 @@ public class Login implements Initializable {
     public Label langLabel;
     public Label tzText;
     public Label langText;
+
+    public static String  userName;
+    public static String getUser(){
+        return userName;
+    }
 
     /** Initialize login, gets rb for french if the system language is French. Uses .properties to translate
      * text into appropriate French translation for any user text. Gets the time zone and language and assigns
@@ -59,7 +64,9 @@ public class Login implements Initializable {
     /** Login button pressed, gather username and password and validate against DB.
      * Loads the main page if successfull, displays error if not. */
     public void onLogin(ActionEvent actionEvent) throws SQLException, IOException {
-        if (LoginQuery.findUser(usernameField.getText(), passwordField.getText())){
+        if (UserDAO.findUser(usernameField.getText(), passwordField.getText())){
+            userName = usernameField.getText();
+
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/home.fxml")));
             Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
 

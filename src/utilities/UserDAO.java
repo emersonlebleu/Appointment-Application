@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /** Collection of login related query functions. */
-public abstract class LoginQuery {
+public abstract class UserDAO {
 
     /** Attempts to find a username password match for login.
      * @param username username from the input field on login page.
