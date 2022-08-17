@@ -1,14 +1,11 @@
 package utilities;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /** An abstract class for the users local settings. Includes the language and date/time information. */
-public abstract class Local {
+public abstract class CurrentSession {
     private static LocalDateTime dateTime;
 
     /** Get the local time zone ID.

@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import utilities.Local;
+import utilities.CurrentSession;
 import utilities.UserDAO;
 
 import java.io.IOException;
@@ -57,8 +57,8 @@ public class Login implements Initializable {
             loginButton.setText(rb.getString("login"));
         }
 
-        tzText.setText(Local.getZone().toString());
-        langText.setText(Local.getLangString());
+        tzText.setText(CurrentSession.getZone().toString());
+        langText.setText(CurrentSession.getLangString());
     }
 
     /** Login button pressed, gather username and password and validate against DB.
