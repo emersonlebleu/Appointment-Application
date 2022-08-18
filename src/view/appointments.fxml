@@ -14,36 +14,6 @@
    <children>
       <StackPane fx:id="apptStack" layoutX="-1.0" prefHeight="553.0" prefWidth="663.0">
          <children>
-            <AnchorPane id="addPane" fx:id="addPane" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <AnchorPane id="addForm" layoutX="147.0" layoutY="65.0" prefHeight="394.0" prefWidth="369.0">
-                     <children>
-                        <Label layoutX="37.0" layoutY="43.0" text="Appointment ID" />
-                        <Label layoutX="37.0" layoutY="73.0" text="Title" />
-                        <Label layoutX="37.0" layoutY="101.0" text="Description" />
-                        <Label layoutX="37.0" layoutY="129.0" text="Location" />
-                        <Label layoutX="37.0" layoutY="161.0" text="Contact" />
-                        <Label layoutX="37.0" layoutY="188.0" text="Type" />
-                        <Label layoutX="37.0" layoutY="217.0" text="Start" />
-                        <Label layoutX="37.0" layoutY="249.0" text="End" />
-                        <Label layoutX="37.0" layoutY="279.0" text="Customer" />
-                        <Label layoutX="36.0" layoutY="309.0" text="User" />
-                        <TextField layoutX="142.0" layoutY="39.0" prefHeight="25.0" prefWidth="80.0" />
-                        <TextField layoutX="142.0" layoutY="69.0" prefHeight="25.0" prefWidth="168.0" />
-                        <TextField layoutX="142.0" layoutY="97.0" prefHeight="25.0" prefWidth="168.0" />
-                        <TextField layoutX="142.0" layoutY="125.0" prefHeight="25.0" prefWidth="168.0" />
-                        <TextField layoutX="142.0" layoutY="184.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ChoiceBox layoutX="142.0" layoutY="157.0" prefHeight="25.0" prefWidth="125.0" />
-                        <DatePicker layoutX="142.0" layoutY="213.0" prefHeight="25.0" prefWidth="125.0" />
-                        <DatePicker layoutX="142.0" layoutY="245.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ChoiceBox layoutX="142.0" layoutY="275.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ChoiceBox layoutX="142.0" layoutY="305.0" prefHeight="25.0" prefWidth="125.0" />
-                        <Button layoutX="186.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Save" />
-                        <Button fx:id="cancelAdd" layoutX="258.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" onAction="#onCancelAdd" text="Cancel" />
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
             <AnchorPane id="modPane" fx:id="modPane" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Label layoutX="40.0" layoutY="33.0" text="Modify" />
@@ -65,9 +35,9 @@
                         <TableColumn fx:id="userCol" prefWidth="75.0" text="User" />
                     </columns>
                   </TableView>
-                  <Button fx:id="addApptBtn" layoutX="16.0" layoutY="390.0" mnemonicParsing="false" onAction="#add_appt" prefHeight="25.0" prefWidth="176.0" onMouseEntered="#mouseOvAdd" onMouseExited="#mouseOutAdd" text="Add Appointment" />
-                  <Button fx:id="modApptBtn" layoutX="244.0" layoutY="390.0" mnemonicParsing="false" onAction="#mod_appt" prefHeight="25.0" prefWidth="176.0" onMouseEntered="#mouseOvMod" onMouseExited="#mouseOutMod" text="Mod Appointment" />
-                  <Button fx:id="delApptBtn" layoutX="469.0" layoutY="390.0" mnemonicParsing="false" onAction="#delete_appt" prefHeight="25.0" prefWidth="176.0" onMouseEntered="#mouseOvDel" onMouseExited="#mouseOutDel" text="Delete Appointment" />
+                  <Button fx:id="addApptBtn" layoutX="16.0" layoutY="390.0" mnemonicParsing="false" onAction="#add_appt" onMouseEntered="#mouseOvAdd" onMouseExited="#mouseOutAdd" prefHeight="25.0" prefWidth="176.0" text="Add Appointment" />
+                  <Button fx:id="modApptBtn" layoutX="244.0" layoutY="390.0" mnemonicParsing="false" onAction="#mod_appt" onMouseEntered="#mouseOvMod" onMouseExited="#mouseOutMod" prefHeight="25.0" prefWidth="176.0" text="Mod Appointment" />
+                  <Button fx:id="delApptBtn" layoutX="469.0" layoutY="390.0" mnemonicParsing="false" onAction="#delete_appt" onMouseEntered="#mouseOvDel" onMouseExited="#mouseOutDel" prefHeight="25.0" prefWidth="176.0" text="Delete Appointment" />
                   <ChoiceBox id="apptViewPicker" fx:id="apptViewPicker" layoutX="559.0" layoutY="45.0" prefHeight="25.0" prefWidth="86.0" />
                    <AnchorPane id="fwdBackContainer" fx:id="fwdBackContainer" layoutX="17.0" layoutY="17.0" prefHeight="57.0" prefWidth="138.0">
                        <children>
@@ -76,6 +46,45 @@
                            <Label fx:id="calNavUnitLabel" alignment="CENTER" layoutX="48.0" layoutY="23.0" prefHeight="17.0" prefWidth="43.0" text="Month" />
                        </children>
                    </AnchorPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="addPane" fx:id="addPane" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <AnchorPane id="addForm" layoutX="147.0" layoutY="63.0" prefHeight="396.0" prefWidth="387.0">
+                     <children>
+                        <Label layoutX="37.0" layoutY="43.0" text="Appointment ID" />
+                        <Label layoutX="37.0" layoutY="73.0" text="Title" />
+                        <Label layoutX="37.0" layoutY="101.0" text="Description" />
+                        <Label layoutX="37.0" layoutY="129.0" text="Location" />
+                        <Label layoutX="37.0" layoutY="161.0" text="Contact" />
+                        <Label layoutX="37.0" layoutY="188.0" text="Type" />
+                        <Label layoutX="37.0" layoutY="217.0" text="Start-Date &amp; Time" />
+                        <Label layoutX="37.0" layoutY="249.0" text="End-Date &amp; Time" />
+                        <Label layoutX="37.0" layoutY="279.0" text="Customer" />
+                        <Label layoutX="36.0" layoutY="309.0" text="User" />
+                        <TextField id="idField" fx:id="idField" editable="false" layoutX="142.0" layoutY="39.0" prefHeight="25.0" prefWidth="61.0" promptText="auto" />
+                        <TextField id="titleField" fx:id="titleField" layoutX="142.0" layoutY="69.0" prefHeight="25.0" prefWidth="168.0" />
+                        <TextField id="descriptionField" fx:id="descriptionField" layoutX="142.0" layoutY="97.0" prefHeight="25.0" prefWidth="168.0" />
+                        <TextField id="locationField" fx:id="locationField" layoutX="142.0" layoutY="125.0" prefHeight="25.0" prefWidth="168.0" />
+                        <TextField id="typeField" fx:id="typeField" layoutX="142.0" layoutY="184.0" prefHeight="25.0" prefWidth="125.0" />
+                        <ChoiceBox id="contactDropD" fx:id="contactDropD" layoutX="142.0" layoutY="157.0" prefHeight="25.0" prefWidth="125.0" />
+                        <DatePicker id="startDateP" fx:id="startDateP" layoutX="142.0" layoutY="213.0" prefHeight="25.0" prefWidth="101.0" />
+                        <DatePicker id="endDateP" fx:id="endDateP" layoutX="142.0" layoutY="245.0" prefHeight="25.0" prefWidth="101.0" />
+                        <ChoiceBox id="custDropD" fx:id="custDropD" layoutX="142.0" layoutY="275.0" prefHeight="25.0" prefWidth="101.0" />
+                        <ChoiceBox id="userDropD" fx:id="userDropD" layoutX="142.0" layoutY="305.0" prefHeight="25.0" prefWidth="101.0" />
+                        <Button fx:id="saveAdd" layoutX="186.0" layoutY="347.0" mnemonicParsing="false" onAction="#onSaveAdd" prefHeight="25.0" prefWidth="61.0" text="Save" />
+                        <Button fx:id="cancelAdd" layoutX="258.0" layoutY="347.0" mnemonicParsing="false" onAction="#onCancelAdd" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
+                        <TextField id="startHourField" fx:id="startHourField" layoutX="265.0" layoutY="214.0" prefHeight="25.0" prefWidth="26.0" />
+                        <TextField id="startMinField" fx:id="startMinField" layoutX="303.0" layoutY="214.0" prefHeight="25.0" prefWidth="26.0" />
+                        <Label layoutX="295.0" layoutY="216.0" pickOnBounds="false" text=":" />
+                        <TextField id="endHourField" fx:id="endHourField" layoutX="265.0" layoutY="246.0" prefHeight="25.0" prefWidth="26.0" />
+                        <TextField id="endMinField" fx:id="endMinField" layoutX="303.0" layoutY="245.0" prefHeight="25.0" prefWidth="26.0" />
+                        <Label layoutX="295.0" layoutY="249.0" pickOnBounds="false" text=":" />
+                        <ChoiceBox id="amPMStart" fx:id="amPMStart" layoutX="334.0" layoutY="214.0" prefHeight="25.0" prefWidth="30.0" />
+                        <ChoiceBox id="amPMEnd" fx:id="amPMEnd" layoutX="334.0" layoutY="245.0" prefHeight="25.0" prefWidth="30.0" />
+                        <Label layoutX="260.0" layoutY="14.0" prefHeight="17.0" prefWidth="101.0" text="Add Appointment" />
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
          </children>

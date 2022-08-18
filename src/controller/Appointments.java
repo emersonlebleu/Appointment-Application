@@ -9,6 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import model.Appointment;
 import utilities.AppointmentDAO;
 
 import java.net.URL;
@@ -37,11 +38,32 @@ public class Appointments implements Initializable {
     public AnchorPane modPane;
     public AnchorPane addPane;
     public StackPane apptStack;
-
-    private static String startStyle;
     public Button cancelAdd;
+    public Button saveAdd;
+    public TextField idField;
+    public TextField titleField;
+    public TextField descriptionField;
+    public TextField locationField;
+    public TextField typeField;
+    public ChoiceBox contactDropD;
+    public DatePicker startDateP;
+    public DatePicker endDateP;
+    public ChoiceBox custDropD;
+    public ChoiceBox userDropD;
+    public TextField startHourField;
+    public TextField startMinField;
+    public TextField endHourField;
+    public TextField endMinField;
+    public ChoiceBox amPMStart;
+    public ChoiceBox amPMEnd;
+
+
     private ObservableList<model.Appointment> appointments = FXCollections.observableArrayList();
     private model.Appointment selectedAppointment;
+    private static String startStyle;
+
+    public ObservableList<String> amPM = FXCollections.observableArrayList("AM", "PM");
+    public ObservableList<String> moWK = FXCollections.observableArrayList("All", "Month", "Week");
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -66,6 +88,11 @@ public class Appointments implements Initializable {
         contactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
         apptTable.setItems(appointments);
+
+        //Set the choice box options
+        amPMStart.getItems().addAll(amPM);
+        amPMEnd.getItems().addAll(amPM);
+        apptViewPicker.getItems().addAll(moWK);
     }
 
     public void add_appt(ActionEvent actionEvent) {
@@ -114,5 +141,8 @@ public class Appointments implements Initializable {
 
     public void onCancelAdd(ActionEvent actionEvent) {
         addPane.toBack();
+    }
+
+    public void onSaveAdd(ActionEvent actionEvent) {
     }
 }
