@@ -39,7 +39,7 @@
                         <ChoiceBox layoutX="142.0" layoutY="275.0" prefHeight="25.0" prefWidth="125.0" />
                         <ChoiceBox layoutX="142.0" layoutY="305.0" prefHeight="25.0" prefWidth="125.0" />
                         <Button layoutX="186.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Save" />
-                        <Button layoutX="258.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
+                        <Button fx:id="cancelAdd" layoutX="258.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="61.0" onAction="#onCancelAdd" text="Cancel" />
                      </children>
                   </AnchorPane>
                </children>

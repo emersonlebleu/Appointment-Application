@@ -39,6 +39,7 @@ public class Appointments implements Initializable {
     public StackPane apptStack;
 
     private static String startStyle;
+    public Button cancelAdd;
     private ObservableList<model.Appointment> appointments = FXCollections.observableArrayList();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -101,5 +102,9 @@ public class Appointments implements Initializable {
 
     public void mouseOutDel(MouseEvent mouseEvent) {
         delApptBtn.setStyle(startStyle);
+    }
+
+    public void onCancelAdd(ActionEvent actionEvent) {
+        addPane.toBack();
     }
 }
