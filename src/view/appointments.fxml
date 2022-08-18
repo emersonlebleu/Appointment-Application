@@ -16,7 +16,7 @@
          <children>
             <AnchorPane id="addPane" fx:id="addPane" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <AnchorPane layoutX="147.0" layoutY="65.0" prefHeight="394.0" prefWidth="369.0">
+                  <AnchorPane id="addForm" layoutX="147.0" layoutY="65.0" prefHeight="394.0" prefWidth="369.0">
                      <children>
                         <Label layoutX="37.0" layoutY="43.0" text="Appointment ID" />
                         <Label layoutX="37.0" layoutY="73.0" text="Title" />

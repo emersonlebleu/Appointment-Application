@@ -1,7 +1,7 @@
 package model;
 
+import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /** Appointment Class for appointment object. */
 public class Appointment {
@@ -13,11 +13,8 @@ public class Appointment {
     private Timestamp start;
     private Timestamp end;
     private Integer customer;
-    private String customerName;
     private Integer user;
-    private String userName;
     private Integer contact;
-    private String contactName;
 
     /** New appointment method. Generate new appointment. */
     public Appointment(Integer apptId, String title, String description, String location, String type, Timestamp start, Timestamp end, Integer customerId, Integer userId, Integer contactId){
@@ -31,6 +28,7 @@ public class Appointment {
         this.customer = customerId;
         this.user = userId;
         this.contact = contactId;
+
     }
 
     /** Get the appointment id.
@@ -152,4 +150,5 @@ public class Appointment {
     public void setContact(Integer id){
         this.contact = id;
     }
+
 }

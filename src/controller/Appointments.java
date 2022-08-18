@@ -41,6 +41,8 @@ public class Appointments implements Initializable {
     private static String startStyle;
     public Button cancelAdd;
     private ObservableList<model.Appointment> appointments = FXCollections.observableArrayList();
+    private model.Appointment selectedAppointment;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
         try {
@@ -75,6 +77,12 @@ public class Appointments implements Initializable {
     }
 
     public void delete_appt(ActionEvent actionEvent) {
+        selectedAppointment = (model.Appointment) apptTable.getSelectionModel().getSelectedItem();
+        try {
+            AppointmentDAO.deleteAppointment(selectedAppointment.getId());
+        } catch (Exception e) {
+            //FIX**
+        }
     }
 
     public void mouseOvAdd(MouseEvent mouseEvent) {

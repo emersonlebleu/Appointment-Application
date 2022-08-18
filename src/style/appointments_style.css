@@ -29,3 +29,14 @@ Button {
 #apptViewPicker {
     -fx-background-color: #8E94B8;
 }
+
+#addPane {
+    -fx-background-color: rgba(255, 252, 247, .6);
+}
+
+#addForm {
+    -fx-background-color: rgba(255, 252, 247, 1);
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #3F4464;
+}
