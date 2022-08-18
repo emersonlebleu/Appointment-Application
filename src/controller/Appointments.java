@@ -6,7 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import utilities.AppointmentDAO;
 
 import java.net.URL;
@@ -32,7 +34,11 @@ public class Appointments implements Initializable {
     public Button timeBackBtn;
     public Button timeForwardBtn;
     public Label calNavUnitLabel;
+    public AnchorPane modPane;
+    public AnchorPane addPane;
+    public StackPane apptStack;
 
+    private static String startStyle;
     private ObservableList<model.Appointment> appointments = FXCollections.observableArrayList();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle){
@@ -60,11 +66,40 @@ public class Appointments implements Initializable {
     }
 
     public void add_appt(ActionEvent actionEvent) {
+        addPane.toFront();
     }
 
     public void mod_appt(ActionEvent actionEvent) {
+        modPane.toFront();
     }
 
     public void delete_appt(ActionEvent actionEvent) {
+    }
+
+    public void mouseOvAdd(MouseEvent mouseEvent) {
+        startStyle = addApptBtn.getStyle();
+        addApptBtn.setStyle("-fx-background-color: #2F334B;");
+    }
+
+    public void mouseOutAdd(MouseEvent mouseEvent) {
+        addApptBtn.setStyle(startStyle);
+    }
+
+    public void mouseOvMod(MouseEvent mouseEvent) {
+        startStyle = modApptBtn.getStyle();
+        modApptBtn.setStyle("-fx-background-color: #2F334B;");
+    }
+
+    public void mouseOutMod(MouseEvent mouseEvent) {
+        modApptBtn.setStyle(startStyle);
+    }
+
+    public void mouseOvDel(MouseEvent mouseEvent) {
+        startStyle = delApptBtn.getStyle();
+        delApptBtn.setStyle("-fx-background-color: #2F334B;");
+    }
+
+    public void mouseOutDel(MouseEvent mouseEvent) {
+        delApptBtn.setStyle(startStyle);
     }
 }

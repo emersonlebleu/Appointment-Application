@@ -65,9 +65,9 @@
                         <TableColumn fx:id="userCol" prefWidth="75.0" text="User" />
                     </columns>
                   </TableView>
-                  <Button fx:id="addApptBtn" layoutX="16.0" layoutY="390.0" mnemonicParsing="false" onAction="#add_appt" prefHeight="25.0" prefWidth="176.0" text="Add Appointment" />
-                  <Button fx:id="modApptBtn" layoutX="244.0" layoutY="390.0" mnemonicParsing="false" onAction="#mod_appt" prefHeight="25.0" prefWidth="176.0" text="Mod Appointment" />
-                  <Button fx:id="delApptBtn" layoutX="469.0" layoutY="390.0" mnemonicParsing="false" onAction="#delete_appt" prefHeight="25.0" prefWidth="176.0" text="Delete Appointment" />
+                  <Button fx:id="addApptBtn" layoutX="16.0" layoutY="390.0" mnemonicParsing="false" onAction="#add_appt" prefHeight="25.0" prefWidth="176.0" onMouseEntered="#mouseOvAdd" onMouseExited="#mouseOutAdd" text="Add Appointment" />
+                  <Button fx:id="modApptBtn" layoutX="244.0" layoutY="390.0" mnemonicParsing="false" onAction="#mod_appt" prefHeight="25.0" prefWidth="176.0" onMouseEntered="#mouseOvMod" onMouseExited="#mouseOutMod" text="Mod Appointment" />
+                  <Button fx:id="delApptBtn" layoutX="469.0" layoutY="390.0" mnemonicParsing="false" onAction="#delete_appt" prefHeight="25.0" prefWidth="176.0" onMouseEntered="#mouseOvDel" onMouseExited="#mouseOutDel" text="Delete Appointment" />
                   <ChoiceBox id="apptViewPicker" fx:id="apptViewPicker" layoutX="559.0" layoutY="45.0" prefHeight="25.0" prefWidth="86.0" />
                    <AnchorPane id="fwdBackContainer" fx:id="fwdBackContainer" layoutX="17.0" layoutY="17.0" prefHeight="57.0" prefWidth="138.0">
                        <children>
