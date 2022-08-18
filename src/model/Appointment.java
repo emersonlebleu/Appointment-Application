@@ -1,32 +1,33 @@
 package model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /** Appointment Class for appointment object. */
 public class Appointment {
-    private int id;
+    private Integer id;
     private String title;
     private String description;
     private String location;
     private String type;
-    private Date start;
-    private Date end;
-    private int customer;
+    private Timestamp start;
+    private Timestamp end;
+    private Integer customer;
     private String customerName;
-    private int user;
+    private Integer user;
     private String userName;
-    private int contact;
+    private Integer contact;
     private String contactName;
 
     /** New appointment method. Generate new appointment. */
-    public Appointment(int apptId, String title, String description, String location, String type, Date startDate, Date endDate, int customerId, int userId, int contactId){
+    public Appointment(Integer apptId, String title, String description, String location, String type, Timestamp start, Timestamp end, Integer customerId, Integer userId, Integer contactId){
         this.id = apptId;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
-        this.start = startDate;
-        this.end = endDate;
+        this.start = start;
+        this.end = end;
         this.customer = customerId;
         this.user = userId;
         this.contact = contactId;
@@ -34,13 +35,13 @@ public class Appointment {
 
     /** Get the appointment id.
      * @return the appointment id of the object. */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     /** Set the id.
      * @param id the id to set this object to. */
-    public void setId(int id){
+    public void setId(Integer id){
         this.id = id;
     }
 
@@ -94,61 +95,61 @@ public class Appointment {
 
     /** Get the appointment startDate.
      * @return the startDate of the object. */
-    public Date getStart() {
+    public Timestamp getStart() {
         return start;
     }
 
     /** Set the startDate.
      * @param start the startDate to set. */
-    public void setStart(Date start){
+    public void setStart(Timestamp start){
         this.start = start;
     }
 
     /** Get the appointment endDate.
      * @return the endDate of the object. */
-    public Date getEnd() {
+    public Timestamp getEnd() {
         return end;
     }
 
     /** Set the endDate.
      * @param end the endDate to set. */
-    public void setEnd(Date end){
+    public void setEnd(Timestamp end){
         this.end = end;
     }
 
     /** Get the customer id.
      * @return the customer id. */
-    public int getCustomer() {
+    public Integer getCustomer() {
         return customer;
     }
 
     /** Set the customer id.
      * @param id the customer id to set. */
-    public void setCustomer(int id){
+    public void setCustomer(Integer id){
         this.customer = id;
     }
 
     /** Get the user id.
      * @return the user id. */
-    public int getUser() {
+    public Integer getUser() {
         return user;
     }
 
     /** Set the user id.
      * @param id the user id to set. */
-    public void setUser(int id){
+    public void setUser(Integer id){
         this.user = id;
     }
 
     /** Get the contact id.
      * @return the contact id. */
-    public int getContact() {
+    public Integer getContact() {
         return contact;
     }
 
     /** Set the contact id.
      * @param id the contact id to set. */
-    public void setContact(int id){
+    public void setContact(Integer id){
         this.contact = id;
     }
 }
