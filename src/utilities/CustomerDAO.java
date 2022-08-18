@@ -2,7 +2,6 @@ package utilities;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Appointment;
 import model.Customer;
 
 import java.sql.PreparedStatement;
