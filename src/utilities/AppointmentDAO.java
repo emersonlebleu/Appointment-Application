@@ -7,6 +7,7 @@ import model.Appointment;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /** CRUD for appointments interaction */
 public abstract class AppointmentDAO {
@@ -18,8 +19,8 @@ public abstract class AppointmentDAO {
         ps.setString(2, appointment.getDescription());
         ps.setString(3, appointment.getLocation());
         ps.setString(4, appointment.getType());
-        ps.setTimestamp(5, appointment.getStart());
-        ps.setTimestamp(6, appointment.getEnd());
+        ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
+        ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd()));
         ps.setInt(7, appointment.getCustomer());
         ps.setInt(8, appointment.getUser());
         ps.setInt(9, appointment.getContact());
@@ -35,7 +36,7 @@ public abstract class AppointmentDAO {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()){
-            model.Appointment appointment = new Appointment( rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start"), rs.getTimestamp("End"), rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID"));
+            model.Appointment appointment = new Appointment( rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(), rs.getTimestamp("End").toLocalDateTime(), rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID"));
             return appointment;
         } else {
             return null;
@@ -52,8 +53,8 @@ public abstract class AppointmentDAO {
         ps.setString(2, appointment.getDescription());
         ps.setString(3, appointment.getLocation());
         ps.setString(4, appointment.getType());
-        ps.setTimestamp(5, appointment.getStart());
-        ps.setTimestamp(6, appointment.getEnd());
+        ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
+        ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd()));
         ps.setInt(7, appointment.getCustomer());
         ps.setInt(8, appointment.getUser());
         ps.setInt(9, appointment.getContact());
@@ -81,7 +82,7 @@ public abstract class AppointmentDAO {
         ResultSet rs = ps.executeQuery();
 
         while(rs.next()){
-            appointments.add(new Appointment( rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start"), rs.getTimestamp("End"), rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            appointments.add(new Appointment( rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(), rs.getTimestamp("End").toLocalDateTime(), rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
 
         return appointments;

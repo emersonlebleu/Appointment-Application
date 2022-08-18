@@ -1,7 +1,11 @@
 package model;
 
+import utilities.CurrentSession;
+
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /** Appointment Class for appointment object. */
 public class Appointment {
@@ -10,21 +14,25 @@ public class Appointment {
     private String description;
     private String location;
     private String type;
-    private Timestamp start;
-    private Timestamp end;
+    private LocalDateTime start;
+    private ZonedDateTime startHere;
+    private LocalDateTime end;
+    private ZonedDateTime endHere;
     private Integer customer;
     private Integer user;
     private Integer contact;
 
     /** New appointment method. Generate new appointment. */
-    public Appointment(Integer apptId, String title, String description, String location, String type, Timestamp start, Timestamp end, Integer customerId, Integer userId, Integer contactId){
+    public Appointment(Integer apptId, String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, Integer customerId, Integer userId, Integer contactId){
         this.id = apptId;
         this.title = title;
         this.description = description;
         this.location = location;
         this.type = type;
         this.start = start;
+        this.startHere = start.atZone(CurrentSession.getZone());
         this.end = end;
+        this.endHere = end.atZone(CurrentSession.getZone());
         this.customer = customerId;
         this.user = userId;
         this.contact = contactId;
@@ -93,25 +101,25 @@ public class Appointment {
 
     /** Get the appointment startDate.
      * @return the startDate of the object. */
-    public Timestamp getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
     /** Set the startDate.
      * @param start the startDate to set. */
-    public void setStart(Timestamp start){
+    public void setStart(LocalDateTime start){
         this.start = start;
     }
 
     /** Get the appointment endDate.
      * @return the endDate of the object. */
-    public Timestamp getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
     /** Set the endDate.
      * @param end the endDate to set. */
-    public void setEnd(Timestamp end){
+    public void setEnd(LocalDateTime end){
         this.end = end;
     }
 
@@ -151,4 +159,11 @@ public class Appointment {
         this.contact = id;
     }
 
+    public ZonedDateTime getStartHere() {
+        return startHere;
+    }
+
+    public ZonedDateTime getEndHere() {
+        return endHere;
+    }
 }
