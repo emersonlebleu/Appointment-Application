@@ -1,5 +1,8 @@
 package utilities;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import model.Contact;
 import model.User;
 
 import java.sql.PreparedStatement;
@@ -67,5 +70,18 @@ public abstract class UserDAO {
             user = new User(rs.getInt("User_ID"), rs.getString("User_Name"), rs.getString("Password"));
         }
         return user;
+    }
+
+    public static ObservableList<User> getAllUsers() throws SQLException{
+        ObservableList<model.User> users = FXCollections.observableArrayList();
+        String sql = "SELECT User_ID, User_Name, Password FROM users";
+
+        PreparedStatement ps = JDBC.conn.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()){
+            users.add(new User( rs.getInt("User_ID"), rs.getString("User_Name"), rs.getString("Password")));
+        }
+        return users;
     }
 }

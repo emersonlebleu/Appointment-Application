@@ -10,9 +10,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import model.Appointment;
+import model.Contact;
+import model.Customer;
+import model.User;
 import utilities.AppointmentDAO;
+import utilities.ContactDAO;
+import utilities.CustomerDAO;
+import utilities.UserDAO;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class Appointments implements Initializable {
@@ -66,10 +73,10 @@ public class Appointments implements Initializable {
     public ObservableList<String> moWK = FXCollections.observableArrayList("All", "Month", "Week");
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             appointments = AppointmentDAO.getAllAppointments();
-            for (model.Appointment appointment: appointments){
+            for (model.Appointment appointment : appointments) {
                 System.out.println(appointment.getDescription());
             }
         } catch (Exception e) {
@@ -89,10 +96,46 @@ public class Appointments implements Initializable {
 
         apptTable.setItems(appointments);
 
+        ObservableList<model.Contact> contacts;
+        ObservableList<Integer> contactIDs = FXCollections.observableArrayList();
+        try {
+            contacts = ContactDAO.getAllContacts();
+            for (model.Contact contact: contacts){
+                contactIDs.add(contact.getId());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        ObservableList<model.Customer> customers;
+        ObservableList<Integer> customerIDs = FXCollections.observableArrayList();
+        try {
+            customers = CustomerDAO.getAllCustomers();
+            for (model.Customer customer: customers){
+                customerIDs.add(customer.getId());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        ObservableList<model.User> users;
+        ObservableList<Integer> userIDs = FXCollections.observableArrayList();
+        try {
+            users = UserDAO.getAllUsers();
+            for (model.User user: users){
+                userIDs.add(user.getId());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         //Set the choice box options
         amPMStart.getItems().addAll(amPM);
         amPMEnd.getItems().addAll(amPM);
         apptViewPicker.getItems().addAll(moWK);
+        contactDropD.getItems().addAll(contactIDs);
+        custDropD.getItems().addAll(customerIDs);
+        userDropD.getItems().addAll(userIDs);
     }
 
     public void add_appt(ActionEvent actionEvent) {
@@ -144,5 +187,10 @@ public class Appointments implements Initializable {
     }
 
     public void onSaveAdd(ActionEvent actionEvent) {
+        titleField.getText();
+        descriptionField.getText();
+        locationField.getText();
+        contactDropD.getValue();
+        startDateP.getValue();
     }
 }
