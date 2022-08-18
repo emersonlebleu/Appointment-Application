@@ -5,14 +5,16 @@ public class Customer {
     private int id;
     private String name;
     private String address;
+    private String postalCode;
     private String phone;
     private int division;
 
     /** Constructor */
-    public Customer(int id, String name, String address, String phone, int division){
+    public Customer(int id, String name, String address, String postalCode, String phone, int division){
         this.id = id;
         this.name = name;
         this.address = address;
+        this.postalCode = postalCode;
         this.phone = phone;
         this.division = division;
     }
@@ -45,6 +47,16 @@ public class Customer {
      * @param address the address of the customer. */
     public void setAddress(String address) {
         this.address = address;
+    }
+    /** Get the postalCode of the customer.
+     * @return the postalCode of the customer */
+    public String getPostalCode() {
+        return postalCode;
+    }
+    /** Set the postalCode of the customer.
+     * @param postalCode the address of the customer. */
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
     /** Get the phone of the customer.
      * @return the phone of the customer */
