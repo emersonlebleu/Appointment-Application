@@ -52,17 +52,13 @@ public class Appointments implements Initializable {
     public TextField descriptionField;
     public TextField locationField;
     public TextField typeField;
-    public ChoiceBox contactDropD;
+    public ComboBox<Contact> contactDropD;
     public DatePicker startDateP;
     public DatePicker endDateP;
-    public ChoiceBox custDropD;
-    public ChoiceBox userDropD;
-    public TextField startHourField;
-    public TextField startMinField;
-    public TextField endHourField;
-    public TextField endMinField;
-    public ChoiceBox amPMStart;
-    public ChoiceBox amPMEnd;
+    public ComboBox<Customer> custDropD;
+    public ComboBox<User> userDropD;
+    public ComboBox amPMStart;
+    public ComboBox amPMEnd;
 
 
     private ObservableList<model.Appointment> appointments = FXCollections.observableArrayList();
@@ -133,9 +129,9 @@ public class Appointments implements Initializable {
         amPMStart.getItems().addAll(amPM);
         amPMEnd.getItems().addAll(amPM);
         apptViewPicker.getItems().addAll(moWK);
-        contactDropD.getItems().addAll(contactIDs);
-        custDropD.getItems().addAll(customerIDs);
-        userDropD.getItems().addAll(userIDs);
+        contactDropD.getItems().addAll(contacts);
+        custDropD.getItems().addAll(customers);
+        userDropD.getItems().addAll(users);
     }
 
     public void add_appt(ActionEvent actionEvent) {
