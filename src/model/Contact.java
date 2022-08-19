@@ -43,4 +43,10 @@ public class Contact {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    /** Override toString in order to get appropriate display on combo boxes */
+    @Override
+    public String toString(){
+        return (id + "-" + name);
+    }
 }

@@ -41,4 +41,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    /** Override toString in order to get appropriate display on combo boxes */
+    @Override
+    public String toString(){
+        return (id + "-" + name);
+    }
 }

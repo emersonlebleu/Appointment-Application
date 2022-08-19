@@ -93,45 +93,34 @@ public class Appointments implements Initializable {
         apptTable.setItems(appointments);
 
         ObservableList<model.Contact> contacts;
-        ObservableList<Integer> contactIDs = FXCollections.observableArrayList();
         try {
             contacts = ContactDAO.getAllContacts();
-            for (model.Contact contact: contacts){
-                contactIDs.add(contact.getId());
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         ObservableList<model.Customer> customers;
-        ObservableList<Integer> customerIDs = FXCollections.observableArrayList();
         try {
             customers = CustomerDAO.getAllCustomers();
-            for (model.Customer customer: customers){
-                customerIDs.add(customer.getId());
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         ObservableList<model.User> users;
-        ObservableList<Integer> userIDs = FXCollections.observableArrayList();
         try {
             users = UserDAO.getAllUsers();
-            for (model.User user: users){
-                userIDs.add(user.getId());
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         //Set the choice box options
-        amPMStart.getItems().addAll(amPM);
-        amPMEnd.getItems().addAll(amPM);
+        amPMStart.setItems(amPM);
+        amPMEnd.setItems(amPM);
         apptViewPicker.getItems().addAll(moWK);
-        contactDropD.getItems().addAll(contacts);
-        custDropD.getItems().addAll(customers);
-        userDropD.getItems().addAll(users);
+        
+        contactDropD.setItems(contacts);
+        custDropD.setItems(customers);
+        userDropD.setItems(users);
     }
 
     public void add_appt(ActionEvent actionEvent) {

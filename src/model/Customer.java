@@ -78,4 +78,10 @@ public class Customer {
     public void setDivision(int division) {
         this.division = division;
     }
+
+    /** Override toString in order to get appropriate display on combo boxes */
+    @Override
+    public String toString(){
+        return (id + "-" + name);
+    }
 }
