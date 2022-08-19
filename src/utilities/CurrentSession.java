@@ -2,6 +2,8 @@ package utilities;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Locale;
 
 /** An abstract class for the users local settings. Includes the language and date/time information. */
@@ -13,6 +15,12 @@ public abstract class CurrentSession {
     public static ZoneId getZone(){
         ZoneId zone = ZoneId.systemDefault();
         return zone;
+    }
+
+    public static ZoneOffset getOS(){
+        ZoneOffset OS = ZoneOffset.from(ZonedDateTime.now());
+
+        return OS;
     }
 
     /** Gets the language string of the default language.

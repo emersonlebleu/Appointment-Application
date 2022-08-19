@@ -88,8 +88,8 @@ public class Appointments implements Initializable {
         descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
-        startCol.setCellValueFactory(new PropertyValueFactory<>("startHere"));
-        endCol.setCellValueFactory(new PropertyValueFactory<>("endHere"));
+        startCol.setCellValueFactory(new PropertyValueFactory<>("startFormat"));
+        endCol.setCellValueFactory(new PropertyValueFactory<>("endFormat"));
         customerCol.setCellValueFactory(new PropertyValueFactory<>("customer"));
         userCol.setCellValueFactory(new PropertyValueFactory<>("user"));
         contactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));

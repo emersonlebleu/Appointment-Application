@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /** Appointment Class for appointment object. */
 public class Appointment {
@@ -15,9 +16,9 @@ public class Appointment {
     private String location;
     private String type;
     private LocalDateTime start;
-    private ZonedDateTime startHere;
+    private ZonedDateTime startFormat;
     private LocalDateTime end;
-    private ZonedDateTime endHere;
+    private ZonedDateTime endFormat;
     private Integer customer;
     private Integer user;
     private Integer contact;
@@ -30,9 +31,9 @@ public class Appointment {
         this.location = location;
         this.type = type;
         this.start = start;
-        this.startHere = start.atZone(CurrentSession.getZone());
+        this.startFormat = start.atZone(CurrentSession.getZone());
         this.end = end;
-        this.endHere = end.atZone(CurrentSession.getZone());
+        this.endFormat = end.atZone(CurrentSession.getZone());
         this.customer = customerId;
         this.user = userId;
         this.contact = contactId;
@@ -159,11 +160,13 @@ public class Appointment {
         this.contact = id;
     }
 
-    public ZonedDateTime getStartHere() {
-        return startHere;
+    public String getStartFormat() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm zzz");
+        return startFormat.format(formatter);
     }
 
-    public ZonedDateTime getEndHere() {
-        return endHere;
+    public String getEndFormat() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm zzz");
+        return endFormat.format(formatter);
     }
 }

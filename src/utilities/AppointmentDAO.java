@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 /** CRUD for appointments interaction */
 public abstract class AppointmentDAO {
@@ -19,8 +22,8 @@ public abstract class AppointmentDAO {
         ps.setString(2, appointment.getDescription());
         ps.setString(3, appointment.getLocation());
         ps.setString(4, appointment.getType());
-        ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
-        ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd()));
+        ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
         ps.setInt(7, appointment.getCustomer());
         ps.setInt(8, appointment.getUser());
         ps.setInt(9, appointment.getContact());
@@ -36,7 +39,9 @@ public abstract class AppointmentDAO {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()){
-            model.Appointment appointment = new Appointment( rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(), rs.getTimestamp("End").toLocalDateTime(), rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID"));
+            ZonedDateTime startUTC = rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.of("UTC"));
+            model.Appointment appointment = new Appointment( rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), startUTC.withZoneSameInstant(CurrentSession.getZone()).toLocalDateTime(), endUTC.withZoneSameInstant(CurrentSession.getZone()).toLocalDateTime(), rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID"));
             return appointment;
         } else {
             return null;
@@ -53,8 +58,8 @@ public abstract class AppointmentDAO {
         ps.setString(2, appointment.getDescription());
         ps.setString(3, appointment.getLocation());
         ps.setString(4, appointment.getType());
-        ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart()));
-        ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd()));
+        ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
         ps.setInt(7, appointment.getCustomer());
         ps.setInt(8, appointment.getUser());
         ps.setInt(9, appointment.getContact());
@@ -82,7 +87,9 @@ public abstract class AppointmentDAO {
         ResultSet rs = ps.executeQuery();
 
         while(rs.next()){
-            appointments.add(new Appointment( rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), rs.getTimestamp("Start").toLocalDateTime(), rs.getTimestamp("End").toLocalDateTime(), rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
+            ZonedDateTime startUTC = rs.getTimestamp("Start").toLocalDateTime().atZone(ZoneId.of("UTC"));
+            ZonedDateTime endUTC = rs.getTimestamp("End").toLocalDateTime().atZone(ZoneId.of("UTC"));
+            appointments.add(new Appointment( rs.getInt("Appointment_ID"), rs.getString("Title"), rs.getString("Description"), rs.getString("Location"), rs.getString("Type"), startUTC.withZoneSameInstant(CurrentSession.getZone()).toLocalDateTime(), endUTC.withZoneSameInstant(CurrentSession.getZone()).toLocalDateTime(), rs.getInt("Customer_ID"), rs.getInt("User_ID"), rs.getInt("Contact_ID")));
         }
 
         return appointments;
