@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 public class Appointments implements Initializable {
@@ -40,7 +41,7 @@ public class Appointments implements Initializable {
     public Button addApptBtn;
     public Button modApptBtn;
     public Button delApptBtn;
-    public ChoiceBox apptViewPicker;
+    public ChoiceBox<String> apptViewPicker;
     public AnchorPane fwdBackContainer;
     public Button timeBackBtn;
     public Button timeForwardBtn;
@@ -72,26 +73,77 @@ public class Appointments implements Initializable {
     public DatePicker modEndDateP;
     public Button saveMod;
     public Button cancelMod;
-    public ComboBox modContactDropD;
-    public ComboBox modStartTime;
-    public ComboBox modEndTime;
-    public ComboBox modCustDropD;
-    public ComboBox modUserDropD;
+    public ComboBox<Contact> modContactDropD;
+    public ComboBox<LocalTime> modStartTime;
+    public ComboBox<LocalTime> modEndTime;
+    public ComboBox<Customer> modCustDropD;
+    public ComboBox<User> modUserDropD;
 
-
-    private ObservableList<model.Appointment> appointments = FXCollections.observableArrayList();
     private model.Appointment selectedAppointment;
     private static String startStyle;
-
-    public ObservableList<String> amPM = FXCollections.observableArrayList("AM", "PM");
     public ObservableList<String> moWK = FXCollections.observableArrayList("All", "Month", "Week");
 
     /** Function refreshes date in the appointments table */
     private void setApptTable(){
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         try {
             appointments = AppointmentDAO.getAllAppointments();
         } catch (Exception e) {
             System.out.println(e);
+        }
+
+        Iterator<Appointment> itr = appointments.iterator();
+
+        if (apptViewPicker.getValue().equals("Week")){
+            for (Iterator<Appointment> it = itr; it.hasNext();) {
+                Appointment appointment = it.next();
+                switch (LocalDateTime.now().getDayOfWeek()){
+                    case MONDAY:
+                        if (appointment.getStart().isBefore(LocalDateTime.now().minusDays(1)) || appointment.getStart().isAfter(LocalDateTime.now().plusDays(5))){
+                            itr.remove();
+                        }
+                        break;
+                    case TUESDAY:
+                        if (appointment.getStart().isBefore(LocalDateTime.now().minusDays(2)) || appointment.getStart().isAfter(LocalDateTime.now().plusDays(4))){
+                            itr.remove();
+                        }
+                        break;
+                    case WEDNESDAY:
+                        if (appointment.getStart().isBefore(LocalDateTime.now().minusDays(3)) || appointment.getStart().isAfter(LocalDateTime.now().plusDays(3))){
+                            itr.remove();
+                        }
+                        break;
+                    case THURSDAY:
+                        if (appointment.getStart().isBefore(LocalDateTime.now().minusDays(4)) || appointment.getStart().isAfter(LocalDateTime.now().plusDays(2))){
+                            itr.remove();
+                        }
+                        break;
+                    case FRIDAY:
+                        if (appointment.getStart().isBefore(LocalDateTime.now().minusDays(5)) || appointment.getStart().isAfter(LocalDateTime.now().plusDays(1))){
+                            itr.remove();
+                        }
+                        break;
+                    case SATURDAY:
+                        if (appointment.getStart().isBefore(LocalDateTime.now().minusDays(6)) || appointment.getStart().isAfter(LocalDateTime.now())) {
+                            itr.remove();
+                        }
+                        break;
+                    case SUNDAY:
+                        if (appointment.getStart().isBefore(LocalDateTime.now()) || appointment.getStart().isAfter(LocalDateTime.now().plusDays(6))){
+                            itr.remove();
+                        }
+                        break;
+                }
+            }
+        } else if (apptViewPicker.getValue().equals("Month")){
+            for (Iterator<Appointment> it = itr; it.hasNext();){
+                Appointment appointment = it.next();
+                if (appointment.getStart().getMonth().equals(LocalDateTime.now().getMonth())) {
+                    continue;
+                } else {
+                    itr.remove();
+                }
+            }
         }
 
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -126,31 +178,31 @@ public class Appointments implements Initializable {
     }
     /** Set the times to an object to be used */
     private ObservableList<LocalTime> times = createTimes();
+    private ObservableList<Customer> customers;
+    private ObservableList<User> users;
+    private ObservableList<Contact> contacts;
 
     /** Sets drop-downs on page */
     private void refreshDropdowns(){
-        ObservableList<model.Contact> contacts;
         try {
             contacts = ContactDAO.getAllContacts();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        ObservableList<model.Customer> customers;
         try {
             customers = CustomerDAO.getAllCustomers();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        ObservableList<model.User> users;
         try {
             users = UserDAO.getAllUsers();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        //Set the choice box options
+        //Set the choice box options add page
         addStartTime.setItems(times);
         addStartTime.setVisibleRowCount(8);
         addStartTime.setPromptText("Start Time...");
@@ -168,6 +220,22 @@ public class Appointments implements Initializable {
         custDropD.setVisibleRowCount(7);
         userDropD.setItems(users);
         userDropD.setVisibleRowCount(7);
+
+        //Set the choice box options mod page
+        modStartTime.setItems(times);
+        modStartTime.setVisibleRowCount(8);
+        modStartTime.setPromptText("Start Time...");
+
+        modEndTime.setItems(times);
+        modEndTime.setVisibleRowCount(8);
+        modEndTime.setPromptText("End Time...");
+
+        modContactDropD.setItems(contacts);
+        modContactDropD.setVisibleRowCount(7);
+        modCustDropD.setItems(customers);
+        modCustDropD.setVisibleRowCount(7);
+        modUserDropD.setItems(users);
+        modUserDropD.setVisibleRowCount(7);
     }
 
     public void clearAddFormFields(){
@@ -186,8 +254,8 @@ public class Appointments implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setApptTable();
         refreshDropdowns();
+        setApptTable();
         homePane.toFront();
     }
 
@@ -196,7 +264,52 @@ public class Appointments implements Initializable {
     }
 
     public void mod_appt(ActionEvent actionEvent) {
+        selectedAppointment = (model.Appointment) apptTable.getSelectionModel().getSelectedItem();
+
         refreshDropdowns();
+        modIdField.setText(String.valueOf(selectedAppointment.getId()));
+        modTitleField.setText(selectedAppointment.getTitle());
+        modDescriptionField.setText(selectedAppointment.getDescription());
+        modLocationField.setText(selectedAppointment.getLocation());
+        modTypeField.setText(selectedAppointment.getType());
+
+
+        //Times Getting local date & time together
+        LocalDate startDate = selectedAppointment.getStart().toLocalDate();
+        LocalTime startTime = selectedAppointment.getStart().toLocalTime();
+        LocalDate endDate = selectedAppointment.getEnd().toLocalDate();
+        LocalTime endTime = selectedAppointment.getEnd().toLocalTime();
+
+        modStartDateP.setValue(startDate);
+        modStartTime.getSelectionModel().select(startTime);
+        modEndDateP.setValue(endDate);
+        modEndTime.getSelectionModel().select(endTime);
+
+        Customer currCustomer = null;
+        for (Customer customer: customers) {
+            if (customer.getId() == selectedAppointment.getCustomer()){
+                currCustomer = customer;
+            }
+        }
+
+        User currUser = null;
+        for (User user: users) {
+            if (user.getId() == selectedAppointment.getUser()){
+                currUser = user;
+            }
+        }
+
+        Contact currContact = null;
+        for (Contact contact: contacts) {
+            if (contact.getId() == selectedAppointment.getContact()){
+                currContact = contact;
+            }
+        }
+
+        modCustDropD.getSelectionModel().select(currCustomer);
+        modUserDropD.getSelectionModel().select(currUser);
+        modContactDropD.getSelectionModel().select(currContact);
+
         modPane.toFront();
     }
 
@@ -281,5 +394,40 @@ public class Appointments implements Initializable {
     }
 
     public void onSaveMod(ActionEvent actionEvent) {
+        Integer id = Integer.parseInt(modIdField.getText());
+        String title = modTitleField.getText();
+        String description = modDescriptionField.getText();
+        String location = modLocationField.getText();
+        String type = modTypeField.getText();
+
+
+        //Times Getting local date & time together
+        LocalDate startDate = modStartDateP.getValue();
+        LocalTime startTime = modStartTime.getValue();
+        LocalDate endDate = modEndDateP.getValue();
+        LocalTime endTime = modEndTime.getValue();
+
+        LocalDateTime start = LocalDateTime.of(startDate, startTime);
+        LocalDateTime end = LocalDateTime.of(endDate, endTime);
+
+        Integer customerId = modCustDropD.getValue().getId();
+        Integer userId = modUserDropD.getValue().getId();
+        Integer contactId = modContactDropD.getValue().getId();
+
+        model.Appointment newAppt = new Appointment(id, title, description, location, type, start, end, customerId, userId, contactId);
+        try {
+            AppointmentDAO.updateAppointment(newAppt);
+            System.out.println("Updated!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        setApptTable();
+        clearAddFormFields();
+        homePane.toFront();
+    }
+
+    public void apptViewChange(ActionEvent actionEvent) {
+        setApptTable();
     }
 }

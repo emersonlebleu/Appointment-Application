@@ -58,7 +58,7 @@ public abstract class AppointmentDAO {
     /** Update an appointment given an appointment object.
      * @param appointment an appointment object to set values to. */
     public static void updateAppointment(model.Appointment appointment) throws SQLException{
-        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";
 
         PreparedStatement ps = JDBC.conn.prepareStatement(sql);
         ps.setString(1, appointment.getTitle());
@@ -67,10 +67,13 @@ public abstract class AppointmentDAO {
         ps.setString(4, appointment.getType());
         ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
         ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
-        ps.setInt(7, appointment.getCustomer());
-        ps.setInt(8, appointment.getUser());
-        ps.setInt(9, appointment.getContact());
-        ps.setInt(10, appointment.getId());
+        ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        String createdBy = "ScheduleAppUser: " + Login.currUser.getName();
+        ps.setString(8, createdBy);
+        ps.setInt(9, appointment.getCustomer());
+        ps.setInt(10, appointment.getUser());
+        ps.setInt(11, appointment.getContact());
+        ps.setInt(12, appointment.getId());
 
         ps.executeUpdate();
     }

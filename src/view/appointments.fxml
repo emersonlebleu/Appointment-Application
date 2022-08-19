@@ -67,7 +67,7 @@
                   <Button fx:id="addApptBtn" layoutX="16.0" layoutY="390.0" mnemonicParsing="false" onAction="#add_appt" onMouseEntered="#mouseOvAdd" onMouseExited="#mouseOutAdd" prefHeight="25.0" prefWidth="176.0" text="Add Appointment" />
                   <Button fx:id="modApptBtn" layoutX="244.0" layoutY="390.0" mnemonicParsing="false" onAction="#mod_appt" onMouseEntered="#mouseOvMod" onMouseExited="#mouseOutMod" prefHeight="25.0" prefWidth="176.0" text="Mod Appointment" />
                   <Button fx:id="delApptBtn" layoutX="469.0" layoutY="390.0" mnemonicParsing="false" onAction="#delete_appt" onMouseEntered="#mouseOvDel" onMouseExited="#mouseOutDel" prefHeight="25.0" prefWidth="176.0" text="Delete Appointment" />
-                  <ChoiceBox id="apptViewPicker" fx:id="apptViewPicker" layoutX="559.0" layoutY="45.0" prefHeight="25.0" prefWidth="86.0" />
+                  <ChoiceBox id="apptViewPicker" fx:id="apptViewPicker" layoutX="559.0" layoutY="45.0" prefHeight="25.0" onAction="#apptViewChange" prefWidth="86.0" />
                    <AnchorPane id="fwdBackContainer" fx:id="fwdBackContainer" layoutX="17.0" layoutY="17.0" prefHeight="57.0" prefWidth="138.0">
                        <children>
                            <Button id="timeBackBtn" fx:id="timeBackBtn" layoutX="13.0" layoutY="19.0" mnemonicParsing="false" text="&lt;" />
