@@ -17,7 +17,7 @@
          <children>
             <AnchorPane id="modPane" fx:id="modPane" prefHeight="200.0" prefWidth="200.0">
                <children>
-                   <AnchorPane id="addForm" layoutX="147.0" layoutY="63.0" prefHeight="396.0" prefWidth="387.0">
+                   <AnchorPane id="Form" layoutX="147.0" layoutY="63.0" prefHeight="396.0" prefWidth="387.0">
                        <children>
                            <Label layoutX="37.0" layoutY="43.0" text="Appointment ID" />
                            <Label layoutX="37.0" layoutY="73.0" text="Title" />
@@ -38,7 +38,7 @@
                            <DatePicker id="modEndDateP" fx:id="modEndDateP" layoutX="98.0" layoutY="245.0" prefHeight="25.0" prefWidth="111.0" />
                            <Button fx:id="saveMod" layoutX="186.0" layoutY="347.0" mnemonicParsing="false" onAction="#onSaveMod" prefHeight="25.0" prefWidth="61.0" text="Save" />
                            <Button fx:id="cancelMod" layoutX="258.0" layoutY="347.0" mnemonicParsing="false" onAction="#onCancelMod" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
-                           <Label layoutX="260.0" layoutY="14.0" prefHeight="17.0" prefWidth="101.0" text="Add Appointment" />
+                           <Label layoutX="250.0" layoutY="14.0" prefHeight="17.0" prefWidth="111.0" text="Modify Appointment" />
                            <ComboBox id="modContactDropD" fx:id="modContactDropD" layoutX="142.0" layoutY="157.0" prefHeight="25.0" prefWidth="125.0" />
                            <ComboBox id="modStartTime" fx:id="modStartTime" layoutX="217.0" layoutY="213.0" prefHeight="25.0" prefWidth="125.0" />
                            <ComboBox id="modEndTime" fx:id="modEndTime" layoutX="217.0" layoutY="245.0" prefHeight="25.0" prefWidth="125.0" />
@@ -79,7 +79,7 @@
             </AnchorPane>
             <AnchorPane id="addPane" fx:id="addPane" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <AnchorPane id="addForm" layoutX="147.0" layoutY="63.0" prefHeight="396.0" prefWidth="387.0">
+                  <AnchorPane id="Form" layoutX="147.0" layoutY="63.0" prefHeight="396.0" prefWidth="387.0">
                      <children>
                         <Label layoutX="37.0" layoutY="43.0" text="Appointment ID" />
                         <Label layoutX="37.0" layoutY="73.0" text="Title" />
