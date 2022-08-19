@@ -63,6 +63,20 @@ public class Appointments implements Initializable {
     public ComboBox<LocalTime> amPMStart;
     public ComboBox<LocalTime> amPMEnd;
     public AnchorPane homePane;
+    public TextField modIdField;
+    public TextField modTitleField;
+    public TextField modDescriptionField;
+    public TextField modLocationField;
+    public TextField modTypeField;
+    public DatePicker modStartDateP;
+    public DatePicker modEndDateP;
+    public Button saveMod;
+    public Button cancelMod;
+    public ComboBox modContactDropD;
+    public ComboBox modStartTime;
+    public ComboBox modEndTime;
+    public ComboBox modCustDropD;
+    public ComboBox modUserDropD;
 
 
     private ObservableList<model.Appointment> appointments = FXCollections.observableArrayList();
@@ -174,6 +188,7 @@ public class Appointments implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setApptTable();
         refreshDropdowns();
+        homePane.toFront();
     }
 
     public void add_appt(ActionEvent actionEvent) {
@@ -181,6 +196,7 @@ public class Appointments implements Initializable {
     }
 
     public void mod_appt(ActionEvent actionEvent) {
+        refreshDropdowns();
         modPane.toFront();
     }
 
@@ -222,6 +238,7 @@ public class Appointments implements Initializable {
     }
 
     public void onCancelAdd(ActionEvent actionEvent) {
+        clearAddFormFields();
         homePane.toFront();
     }
 
@@ -257,5 +274,12 @@ public class Appointments implements Initializable {
         setApptTable();
         clearAddFormFields();
         homePane.toFront();
+    }
+
+    public void onCancelMod(ActionEvent actionEvent) {
+        homePane.toFront();
+    }
+
+    public void onSaveMod(ActionEvent actionEvent) {
     }
 }
