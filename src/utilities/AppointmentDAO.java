@@ -1,5 +1,6 @@
 package utilities;
 
+import controller.Login;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Appointment;
@@ -8,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -16,7 +18,7 @@ import java.time.ZonedDateTime;
 public abstract class AppointmentDAO {
 
     public static void addAppointment(model.Appointment appointment) throws SQLException{
-        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = JDBC.conn.prepareStatement(sql);
         ps.setString(1, appointment.getTitle());
         ps.setString(2, appointment.getDescription());
@@ -24,11 +26,16 @@ public abstract class AppointmentDAO {
         ps.setString(4, appointment.getType());
         ps.setTimestamp(5, Timestamp.valueOf(appointment.getStart().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
         ps.setTimestamp(6, Timestamp.valueOf(appointment.getEnd().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
-        ps.setInt(7, appointment.getCustomer());
-        ps.setInt(8, appointment.getUser());
-        ps.setInt(9, appointment.getContact());
+        ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        String createdBy = "ScheduleAppUser: " + Login.currUser.getName();
+        ps.setString(8, createdBy);
+        ps.setTimestamp(9, Timestamp.valueOf(LocalDateTime.now().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        ps.setString(10, createdBy);
+        ps.setInt(11, appointment.getCustomer());
+        ps.setInt(12, appointment.getUser());
+        ps.setInt(13, appointment.getContact());
 
-        ps.executeQuery();
+        ps.executeUpdate();
     }
 
     public static model.Appointment getAppointment(Integer id) throws SQLException{
@@ -65,7 +72,7 @@ public abstract class AppointmentDAO {
         ps.setInt(9, appointment.getContact());
         ps.setInt(10, appointment.getId());
 
-        ResultSet rs = ps.executeQuery();
+        ps.executeUpdate();
     }
 
     /** Delete a given appointment by id. */
@@ -74,7 +81,7 @@ public abstract class AppointmentDAO {
 
         PreparedStatement ps = JDBC.conn.prepareStatement(sql);
         ps.setString(1, String.valueOf(id));
-        ResultSet rs = ps.executeQuery();
+        ps.executeUpdate();
     }
 
     /** Get all appointments in database and output to a list object.

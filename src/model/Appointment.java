@@ -39,6 +39,19 @@ public class Appointment {
         this.contact = contactId;
 
     }
+    public Appointment(String title, String description, String location, String type, LocalDateTime start, LocalDateTime end, Integer customerId, Integer userId, Integer contactId){
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.type = type;
+        this.start = start;
+        this.startFormat = start.atZone(CurrentSession.getZone());
+        this.end = end;
+        this.endFormat = end.atZone(CurrentSession.getZone());
+        this.customer = customerId;
+        this.user = userId;
+        this.contact = contactId;
+    }
 
     /** Get the appointment id.
      * @return the appointment id of the object. */

@@ -20,7 +20,7 @@
                   <Label layoutX="40.0" layoutY="33.0" text="Modify" />
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <AnchorPane fx:id="homePane" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <TableView id="apptTable" fx:id="apptTable" layoutX="16.0" layoutY="77.0" prefHeight="301.0" prefWidth="629.0">
                     <columns>
@@ -68,18 +68,16 @@
                         <TextField id="descriptionField" fx:id="descriptionField" layoutX="142.0" layoutY="97.0" prefHeight="25.0" prefWidth="168.0" />
                         <TextField id="locationField" fx:id="locationField" layoutX="142.0" layoutY="125.0" prefHeight="25.0" prefWidth="168.0" />
                         <TextField id="typeField" fx:id="typeField" layoutX="142.0" layoutY="184.0" prefHeight="25.0" prefWidth="125.0" />
-                        <DatePicker id="startDateP" fx:id="startDateP" layoutX="98.0" layoutY="213.0" prefHeight="25.0" prefWidth="101.0" />
-                        <DatePicker id="endDateP" fx:id="endDateP" layoutX="98.0" layoutY="245.0" prefHeight="25.0" prefWidth="101.0" />
+                        <DatePicker id="startDateP" fx:id="startDateP" layoutX="98.0" layoutY="213.0" prefHeight="25.0" prefWidth="111.0" />
+                        <DatePicker id="endDateP" fx:id="endDateP" layoutX="98.0" layoutY="245.0" prefHeight="25.0" prefWidth="111.0" />
                         <Button fx:id="saveAdd" layoutX="186.0" layoutY="347.0" mnemonicParsing="false" onAction="#onSaveAdd" prefHeight="25.0" prefWidth="61.0" text="Save" />
                         <Button fx:id="cancelAdd" layoutX="258.0" layoutY="347.0" mnemonicParsing="false" onAction="#onCancelAdd" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
                         <Label layoutX="260.0" layoutY="14.0" prefHeight="17.0" prefWidth="101.0" text="Add Appointment" />
-                        <Label layoutX="216.0" layoutY="217.0" text="Start Time" />
-                        <Label layoutX="218.0" layoutY="249.0" text="End Time" />
                         <ComboBox id="contactDropD" fx:id="contactDropD" layoutX="142.0" layoutY="157.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ComboBox id="amPMStart" fx:id="amPMStart" layoutX="273.0" layoutY="213.0" prefHeight="25.0" prefWidth="92.0" />
-                        <ComboBox id="amPMEnd" fx:id="amPMEnd" layoutX="273.0" layoutY="245.0" prefHeight="25.0" prefWidth="92.0" />
-                        <ComboBox id="custDropD" fx:id="custDropD" layoutX="98.0" layoutY="275.0" prefHeight="25.0" prefWidth="101.0" />
-                        <ComboBox id="userDropD" fx:id="userDropD" layoutX="98.0" layoutY="305.0" prefHeight="25.0" prefWidth="101.0" />
+                        <ComboBox id="amPMStart" fx:id="amPMStart" layoutX="217.0" layoutY="213.0" prefHeight="25.0" prefWidth="125.0" />
+                        <ComboBox id="amPMEnd" fx:id="amPMEnd" layoutX="217.0" layoutY="245.0" prefHeight="25.0" prefWidth="125.0" />
+                        <ComboBox id="custDropD" fx:id="custDropD" layoutX="98.0" layoutY="275.0" prefHeight="25.0" prefWidth="111.0" />
+                        <ComboBox id="userDropD" fx:id="userDropD" layoutX="98.0" layoutY="305.0" prefHeight="25.0" prefWidth="111.0" />
                      </children>
                   </AnchorPane>
                </children>

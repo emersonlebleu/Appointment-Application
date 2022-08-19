@@ -20,6 +20,9 @@ import utilities.UserDAO;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class Appointments implements Initializable {
@@ -57,8 +60,9 @@ public class Appointments implements Initializable {
     public DatePicker endDateP;
     public ComboBox<Customer> custDropD;
     public ComboBox<User> userDropD;
-    public ComboBox amPMStart;
-    public ComboBox amPMEnd;
+    public ComboBox<LocalTime> amPMStart;
+    public ComboBox<LocalTime> amPMEnd;
+    public AnchorPane homePane;
 
 
     private ObservableList<model.Appointment> appointments = FXCollections.observableArrayList();
@@ -68,13 +72,10 @@ public class Appointments implements Initializable {
     public ObservableList<String> amPM = FXCollections.observableArrayList("AM", "PM");
     public ObservableList<String> moWK = FXCollections.observableArrayList("All", "Month", "Week");
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    /** Function refreshes date in the appointments table */
+    private void setApptTable(){
         try {
             appointments = AppointmentDAO.getAllAppointments();
-            for (model.Appointment appointment : appointments) {
-                System.out.println(appointment.getDescription());
-            }
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -91,7 +92,29 @@ public class Appointments implements Initializable {
         contactCol.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
         apptTable.setItems(appointments);
+    }
 
+    /** Function creates the list of times */
+    private ObservableList<LocalTime> createTimes(){
+        ObservableList<LocalTime> times = FXCollections.observableArrayList();
+        LocalTime low = LocalTime.of(0, 0);
+        LocalTime high = LocalTime.of(23, 45);
+
+        while (low.isBefore(high) || low.equals(high)) {
+            times.add(low);
+            if (!low.equals(high)){
+                low = low.plusMinutes(15);
+            } else {
+                break;
+            }
+        }
+        return times;
+    }
+    /** Set the times to an object to be used */
+    private ObservableList<LocalTime> times = createTimes();
+
+    /** Sets drop-downs on page */
+    private void refreshDropdowns(){
         ObservableList<model.Contact> contacts;
         try {
             contacts = ContactDAO.getAllContacts();
@@ -114,13 +137,43 @@ public class Appointments implements Initializable {
         }
 
         //Set the choice box options
-        amPMStart.setItems(amPM);
-        amPMEnd.setItems(amPM);
+        amPMStart.setItems(times);
+        amPMStart.setVisibleRowCount(8);
+        amPMStart.setPromptText("Start Time...");
+
+        amPMEnd.setItems(times);
+        amPMEnd.setVisibleRowCount(8);
+        amPMEnd.setPromptText("End Time...");
+
         apptViewPicker.getItems().addAll(moWK);
-        
+        apptViewPicker.setValue(moWK.get(0));
+
         contactDropD.setItems(contacts);
+        contactDropD.setVisibleRowCount(7);
         custDropD.setItems(customers);
+        custDropD.setVisibleRowCount(7);
         userDropD.setItems(users);
+        userDropD.setVisibleRowCount(7);
+    }
+
+    public void clearAddFormFields(){
+        titleField.clear();
+        descriptionField.clear();
+        locationField.clear();
+        typeField.clear();
+        startDateP.setValue(null);
+        endDateP.setValue(null);
+        amPMStart.getSelectionModel().clearSelection();
+        amPMEnd.getSelectionModel().clearSelection();
+        custDropD.getSelectionModel().clearSelection();
+        userDropD.getSelectionModel().clearSelection();
+        contactDropD.getSelectionModel().clearSelection();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        setApptTable();
+        refreshDropdowns();
     }
 
     public void add_appt(ActionEvent actionEvent) {
@@ -135,6 +188,7 @@ public class Appointments implements Initializable {
         selectedAppointment = (model.Appointment) apptTable.getSelectionModel().getSelectedItem();
         try {
             AppointmentDAO.deleteAppointment(selectedAppointment.getId());
+            setApptTable();
         } catch (Exception e) {
             //FIX**
         }
@@ -168,14 +222,40 @@ public class Appointments implements Initializable {
     }
 
     public void onCancelAdd(ActionEvent actionEvent) {
-        addPane.toBack();
+        homePane.toFront();
     }
 
     public void onSaveAdd(ActionEvent actionEvent) {
-        titleField.getText();
-        descriptionField.getText();
-        locationField.getText();
-        contactDropD.getValue();
-        startDateP.getValue();
+
+        String title = titleField.getText();
+        String description = descriptionField.getText();
+        String location = locationField.getText();
+        String type = typeField.getText();
+
+
+        //Times Getting local date & time together
+        LocalDate startDate = startDateP.getValue();
+        LocalTime startTime = amPMStart.getValue();
+        LocalDate endDate = endDateP.getValue();
+        LocalTime endTime = amPMEnd.getValue();
+
+        LocalDateTime start = LocalDateTime.of(startDate, startTime);
+        LocalDateTime end = LocalDateTime.of(endDate, endTime);
+
+        Integer customerId = custDropD.getValue().getId();
+        Integer userId = userDropD.getValue().getId();
+        Integer contactId = contactDropD.getValue().getId();
+
+        model.Appointment newAppt = new Appointment(title, description, location, type, start, end, customerId, userId, contactId);
+        try {
+            AppointmentDAO.addAppointment(newAppt);
+            System.out.println("Added!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        setApptTable();
+        clearAddFormFields();
+        homePane.toFront();
     }
 }
