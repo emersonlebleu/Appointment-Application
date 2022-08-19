@@ -60,8 +60,8 @@ public class Appointments implements Initializable {
     public DatePicker endDateP;
     public ComboBox<Customer> custDropD;
     public ComboBox<User> userDropD;
-    public ComboBox<LocalTime> amPMStart;
-    public ComboBox<LocalTime> amPMEnd;
+    public ComboBox<LocalTime> addStartTime;
+    public ComboBox<LocalTime> addEndTime;
     public AnchorPane homePane;
     public TextField modIdField;
     public TextField modTitleField;
@@ -151,13 +151,13 @@ public class Appointments implements Initializable {
         }
 
         //Set the choice box options
-        amPMStart.setItems(times);
-        amPMStart.setVisibleRowCount(8);
-        amPMStart.setPromptText("Start Time...");
+        addStartTime.setItems(times);
+        addStartTime.setVisibleRowCount(8);
+        addStartTime.setPromptText("Start Time...");
 
-        amPMEnd.setItems(times);
-        amPMEnd.setVisibleRowCount(8);
-        amPMEnd.setPromptText("End Time...");
+        addEndTime.setItems(times);
+        addEndTime.setVisibleRowCount(8);
+        addEndTime.setPromptText("End Time...");
 
         apptViewPicker.getItems().addAll(moWK);
         apptViewPicker.setValue(moWK.get(0));
@@ -177,8 +177,8 @@ public class Appointments implements Initializable {
         typeField.clear();
         startDateP.setValue(null);
         endDateP.setValue(null);
-        amPMStart.getSelectionModel().clearSelection();
-        amPMEnd.getSelectionModel().clearSelection();
+        addStartTime.getSelectionModel().clearSelection();
+        addEndTime.getSelectionModel().clearSelection();
         custDropD.getSelectionModel().clearSelection();
         userDropD.getSelectionModel().clearSelection();
         contactDropD.getSelectionModel().clearSelection();
@@ -252,9 +252,9 @@ public class Appointments implements Initializable {
 
         //Times Getting local date & time together
         LocalDate startDate = startDateP.getValue();
-        LocalTime startTime = amPMStart.getValue();
+        LocalTime startTime = addStartTime.getValue();
         LocalDate endDate = endDateP.getValue();
-        LocalTime endTime = amPMEnd.getValue();
+        LocalTime endTime = addEndTime.getValue();
 
         LocalDateTime start = LocalDateTime.of(startDate, startTime);
         LocalDateTime end = LocalDateTime.of(endDate, endTime);

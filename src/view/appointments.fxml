@@ -102,8 +102,8 @@
                         <Button fx:id="cancelAdd" layoutX="258.0" layoutY="347.0" mnemonicParsing="false" onAction="#onCancelAdd" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
                         <Label layoutX="260.0" layoutY="14.0" prefHeight="17.0" prefWidth="101.0" text="Add Appointment" />
                         <ComboBox id="contactDropD" fx:id="contactDropD" layoutX="142.0" layoutY="157.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ComboBox id="amPMStart" fx:id="amPMStart" layoutX="217.0" layoutY="213.0" prefHeight="25.0" prefWidth="125.0" />
-                        <ComboBox id="amPMEnd" fx:id="amPMEnd" layoutX="217.0" layoutY="245.0" prefHeight="25.0" prefWidth="125.0" />
+                        <ComboBox id="amPMStart" fx:id="addStartTime" layoutX="217.0" layoutY="213.0" prefHeight="25.0" prefWidth="125.0" />
+                        <ComboBox id="amPMEnd" fx:id="addEndTime" layoutX="217.0" layoutY="245.0" prefHeight="25.0" prefWidth="125.0" />
                         <ComboBox id="custDropD" fx:id="custDropD" layoutX="98.0" layoutY="275.0" prefHeight="25.0" prefWidth="111.0" />
                         <ComboBox id="userDropD" fx:id="userDropD" layoutX="98.0" layoutY="305.0" prefHeight="25.0" prefWidth="111.0" />
                      </children>
