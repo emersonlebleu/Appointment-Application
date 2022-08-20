@@ -3,6 +3,7 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -41,11 +42,6 @@ public class Appointments implements Initializable {
     public Button addApptBtn;
     public Button modApptBtn;
     public Button delApptBtn;
-    public ChoiceBox<String> apptViewPicker;
-    public AnchorPane fwdBackContainer;
-    public Button timeBackBtn;
-    public Button timeForwardBtn;
-    public Label calNavUnitLabel;
     public AnchorPane modPane;
     public AnchorPane addPane;
     public StackPane apptStack;
@@ -78,10 +74,14 @@ public class Appointments implements Initializable {
     public ComboBox<LocalTime> modEndTime;
     public ComboBox<Customer> modCustDropD;
     public ComboBox<User> modUserDropD;
+    public RadioButton monthRadio;
+    public RadioButton weekRadio;
+    public RadioButton allRadio;
+    public ToggleGroup viewToggle;
 
     private model.Appointment selectedAppointment;
     private static String startStyle;
-    public ObservableList<String> moWK = FXCollections.observableArrayList("All", "Month", "Week");
+
 
     /** Function refreshes date in the appointments table */
     private void setApptTable(){
@@ -94,7 +94,7 @@ public class Appointments implements Initializable {
 
         Iterator<Appointment> itr = appointments.iterator();
 
-        if (apptViewPicker.getValue().equals("Week")){
+        if (weekRadio.isSelected()){
             for (Iterator<Appointment> it = itr; it.hasNext();) {
                 Appointment appointment = it.next();
                 switch (LocalDateTime.now().getDayOfWeek()){
@@ -135,7 +135,7 @@ public class Appointments implements Initializable {
                         break;
                 }
             }
-        } else if (apptViewPicker.getValue().equals("Month")){
+        } else if (monthRadio.isSelected()){
             for (Iterator<Appointment> it = itr; it.hasNext();){
                 Appointment appointment = it.next();
                 if (appointment.getStart().getMonth().equals(LocalDateTime.now().getMonth())) {
@@ -249,10 +249,14 @@ public class Appointments implements Initializable {
         contactDropD.getSelectionModel().clearSelection();
     }
 
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        apptViewPicker.getItems().addAll(moWK);
-        apptViewPicker.setValue(moWK.get(0));
+        allRadio.setToggleGroup(viewToggle);
+        monthRadio.setToggleGroup(viewToggle);
+        weekRadio.setToggleGroup(viewToggle);
+        allRadio.setSelected(true);
 
         refreshDropdowns();
         setApptTable();
@@ -427,7 +431,15 @@ public class Appointments implements Initializable {
         homePane.toFront();
     }
 
-    public void apptViewChange(ActionEvent actionEvent) {
+    public void onMonth(ActionEvent actionEvent) {
+        setApptTable();
+    }
+
+    public void onWeek(ActionEvent actionEvent) {
+        setApptTable();
+    }
+
+    public void onAll(ActionEvent actionEvent) {
         setApptTable();
     }
 }
