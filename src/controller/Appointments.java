@@ -211,9 +211,6 @@ public class Appointments implements Initializable {
         addEndTime.setVisibleRowCount(8);
         addEndTime.setPromptText("End Time...");
 
-        apptViewPicker.getItems().addAll(moWK);
-        apptViewPicker.setValue(moWK.get(0));
-
         contactDropD.setItems(contacts);
         contactDropD.setVisibleRowCount(7);
         custDropD.setItems(customers);
@@ -254,6 +251,9 @@ public class Appointments implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        apptViewPicker.getItems().addAll(moWK);
+        apptViewPicker.setValue(moWK.get(0));
+
         refreshDropdowns();
         setApptTable();
         homePane.toFront();
