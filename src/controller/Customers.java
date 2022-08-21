@@ -69,6 +69,23 @@ public class Customers implements Initializable {
     }
 
     public void onSaveMod(ActionEvent actionEvent) {
+        Integer id = Integer.valueOf(modIdField.getText());
+        String name = modNameField.getText();
+        String address = modAddressField.getText();
+        String postal = modPostalField.getText();
+        String phone = modPhoneField.getText();
+        Integer firstLevId = modFirstLevDropD.getValue().getId();
+
+        model.Customer newCust = new Customer(id, name, address, postal, phone, firstLevId);
+        try {
+            CustomerDAO.updateCustomer(newCust);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        setCustTable();
+        clearFormFields();
+        homePane.toFront();
     }
 
     public void onCancelMod(ActionEvent actionEvent) {
@@ -90,12 +107,12 @@ public class Customers implements Initializable {
         }
 
         setCustTable();
-        clearAddFormFields();
+        clearFormFields();
         homePane.toFront();
     }
 
     public void onCancelAdd(ActionEvent actionEvent) {
-        clearAddFormFields();
+        clearFormFields();
         homePane.toFront();
     }
 
@@ -117,6 +134,41 @@ public class Customers implements Initializable {
             alert.showAndWait();
         } else {
             refreshCountries();
+            modIdField.setText(String.valueOf(selectedCustomer.getId()));
+            modNameField.setText(selectedCustomer.getName());
+            modAddressField.setText(selectedCustomer.getAddress());
+            modPostalField.setText(selectedCustomer.getPostalCode());
+            modPhoneField.setText(selectedCustomer.getPhone());
+
+            ObservableList<Country> countries = FXCollections.observableArrayList();
+            ObservableList<Division> divisions = FXCollections.observableArrayList();
+
+            try {
+              countries = CountryDAO.getAllCountries();
+              divisions = DivisionDAO.getAllDivisions();
+            } catch (Exception e) {}
+
+            Division currDiv = null;
+            Country currCountry = null;
+
+            for (Division division: divisions){
+                if (division.getId() == selectedCustomer.getDivision()){
+                    currDiv = division;
+                }
+            }
+
+            for (Country country: countries){
+                if (country.getId() == currDiv.getCountry()){
+                    currCountry = country;
+                }
+            }
+
+            refreshCountries();
+            modCountryDropD.getSelectionModel().select(currCountry);
+            selCountryId = currCountry.getId();
+            modFirstLevDropD.getSelectionModel().select(currDiv);
+            refreshDivisions();
+
             modPane.toFront();
         }
     }
@@ -238,7 +290,7 @@ public class Customers implements Initializable {
         modCountryDropD.setItems(countries);
         modCountryDropD.setVisibleRowCount(5);
     }
-    /** Set divistions drop-downs on page */
+    /** Set divisions drop-downs on page */
     private void refreshDivisions(){
         try {
             divisions = DivisionDAO.getAllDivisions();
@@ -274,18 +326,34 @@ public class Customers implements Initializable {
         }
     }
 
-    public void clearAddFormFields(){
+    public void clearFormFields(){
         nameField.clear();
         addressField.clear();
         postalField.clear();
         phoneField.clear();
         countryDropD.getSelectionModel().clearSelection();
         firstLevDropD.setItems(null);
+
+        modNameField.clear();
+        modAddressField.clear();
+        modPostalField.clear();
+        modPhoneField.clear();
+        modCountryDropD.getSelectionModel().clearSelection();
+        modFirstLevDropD.setItems(null);
     }
 
-    public void countryDropDChange(ActionEvent actionEvent) {
+    public void countryDropDChangeAdd(ActionEvent actionEvent) {
         if (countryDropD.getSelectionModel().getSelectedItem() != null){
             selCountryId = countryDropD.getSelectionModel().getSelectedItem().getId();
+        } else {
+            selCountryId = null;
+        }
+        refreshDivisions();
+    }
+
+    public void countryDropDChangeMod(ActionEvent actionEvent) {
+        if (modCountryDropD.getSelectionModel().getSelectedItem() != null){
+            selCountryId = modCountryDropD.getSelectionModel().getSelectedItem().getId();
         } else {
             selCountryId = null;
         }
