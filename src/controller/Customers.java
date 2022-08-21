@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Customers implements Initializable {
@@ -133,19 +134,42 @@ public class Customers implements Initializable {
 
             alert.showAndWait();
         } else {
-            try {
-                ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
-                for (Appointment appointment: appointments) {
-                    if (appointment.getCustomer() == selectedCustomer.getId()){
-                        AppointmentDAO.deleteAppointment(appointment.getId());
+            //--------------Remove Confirmation Box----------------------//
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you'd like to delete this customer? All associated appointments will also be deleted.");
+            ButtonType buttonTypeYes = new ButtonType("Yes");
+            ButtonType buttonTypeNo = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeYes) {
+                Integer numAppt = 0;
+                try {
+                    ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+                    for (Appointment appointment: appointments) {
+                        if (appointment.getCustomer() == selectedCustomer.getId()){
+                            AppointmentDAO.deleteAppointment(appointment.getId());
+                            numAppt ++;
+                        }
                     }
-                }
-            } catch (Exception e) { System.out.println(e);}
-            try {
-                CustomerDAO.deleteCustomer(selectedCustomer.getId());
-            } catch (Exception e) { System.out.println(e);}
-        }
-        setCustTable();
+                } catch (Exception e) { System.out.println(e);}
+                try {
+                    CustomerDAO.deleteCustomer(selectedCustomer.getId());
+
+                    //----------------Delete Customer--------------------//
+                    Alert notification = new Alert(Alert.AlertType.INFORMATION);
+                    notification.setTitle("Delete Customer Notification");
+                    notification.setHeaderText(null);
+                    notification.initStyle(StageStyle.UTILITY);
+                    notification.setContentText("Deleted customer named \"" + selectedCustomer.getName() + "\" & " + String.valueOf(numAppt) + " associated appointments.");
+
+                    notification.showAndWait();
+                } catch (Exception e) { System.out.println(e);}
+            }
+            setCustTable();
+            }
     }
 
     public void mouseOvAdd(MouseEvent mouseEvent) {
