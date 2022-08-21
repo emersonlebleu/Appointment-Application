@@ -149,21 +149,30 @@ public class Customers implements Initializable {
     }
 
     public void mouseOvAdd(MouseEvent mouseEvent) {
+        startStyle = addCustBtn.getStyle();
+        addCustBtn.setStyle("-fx-background-color: #2F334B;");
     }
 
     public void mouseOutAdd(MouseEvent mouseEvent) {
+        addCustBtn.setStyle(startStyle);
     }
 
     public void mouseOvMod(MouseEvent mouseEvent) {
+        startStyle = modCustBtn.getStyle();
+        modCustBtn.setStyle("-fx-background-color: #2F334B;");
     }
 
     public void mouseOutMod(MouseEvent mouseEvent) {
+        modCustBtn.setStyle(startStyle);
     }
 
     public void mouseOvDel(MouseEvent mouseEvent) {
+        startStyle = delCustBtn.getStyle();
+        delCustBtn.setStyle("-fx-background-color: #2F334B;");
     }
 
     public void mouseOutDel(MouseEvent mouseEvent) {
+        delCustBtn.setStyle(startStyle);
     }
 
     //------------------------------------------------------Functions Used-----------------------------------
