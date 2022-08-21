@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Appointments implements Initializable {
@@ -332,11 +333,45 @@ public class Appointments implements Initializable {
 
     public void delete_appt(ActionEvent actionEvent) {
         selectedAppointment = (model.Appointment) apptTable.getSelectionModel().getSelectedItem();
-        try {
-            AppointmentDAO.deleteAppointment(selectedAppointment.getId());
-            setApptTable();
-        } catch (Exception e) {
-            //FIX**
+
+        if (selectedAppointment == null) {
+            //----------------No Selection Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("No Selection");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText("Please make a selection.");
+
+            alert.showAndWait();
+        } else {
+            //--------------Remove Confirmation Box----------------------//
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Cancel Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you'd like to cancel this appointment?");
+            ButtonType buttonTypeYes = new ButtonType("Yes");
+            ButtonType buttonTypeNo = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeYes) {
+                try {
+                    AppointmentDAO.deleteAppointment(selectedAppointment.getId());
+                    setApptTable();
+                } catch (Exception e) {
+                    //FIX**
+                }
+            } else {
+                //Do nothing
+            }
+            //----------------Canceled Appointment--------------------//
+            Alert notification = new Alert(Alert.AlertType.INFORMATION);
+            notification.setTitle("Canceled Appointment");
+            notification.setHeaderText(null);
+            notification.initStyle(StageStyle.UTILITY);
+            notification.setContentText("Canceled Appointment Number: " + String.valueOf(selectedAppointment.getId()) + "\n" + "Type: " + selectedAppointment.getType());
+
+            notification.showAndWait();
         }
     }
 
@@ -396,7 +431,6 @@ public class Appointments implements Initializable {
         model.Appointment newAppt = new Appointment(title, description, location, type, start, end, customerId, userId, contactId);
         try {
             AppointmentDAO.addAppointment(newAppt);
-            System.out.println("Added!");
         } catch (Exception e) {
             System.out.println(e);
         }
