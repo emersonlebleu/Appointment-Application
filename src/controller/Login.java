@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,12 +14,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import model.Appointment;
+import utilities.AppointmentDAO;
 import utilities.CurrentSession;
 import utilities.UserDAO;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -38,6 +42,39 @@ public class Login implements Initializable {
     public static model.User currUser;
     public static model.User getUser(){
         return currUser;
+    }
+
+    public void apptLoginCheck(){
+        ObservableList<Appointment> appointments = null;
+        try {
+            appointments = AppointmentDAO.getAllAppointments();
+        } catch (Exception e) {
+            //FIX**
+        }
+        Integer numAlerts = 0;
+        for (Appointment appointment: appointments) {
+            if (appointment.getStart().isAfter(LocalDateTime.now()) && appointment.getStart().isBefore(LocalDateTime.now().plusMinutes(15)) && appointment.getUser() == Login.getUser().getId()){
+                //----------------Alert for appointments--------------------//
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Upcoming Appointment");
+                alert.setHeaderText(null);
+                alert.initStyle(StageStyle.UTILITY);
+                alert.setContentText("Appointment ID: " + String.valueOf(appointment.getId()) + "\n" + "Start: " + appointment.getStartFormat());
+
+                alert.showAndWait();
+                numAlerts ++;
+            }
+        }
+
+        if (numAlerts == 0){
+            //----------------Alert for appointments--------------------//
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Upcoming Appointment");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText("User: " + Login.getUser() + " has no upcoming appointments.");
+            alert.showAndWait();
+        }
     }
 
     /** Initialize login, gets rb for french if the system language is French. Uses .properties to translate
@@ -75,6 +112,8 @@ public class Login implements Initializable {
             stage.setTitle("");
             stage.setScene(home);
             stage.show();
+
+            apptLoginCheck();
         } else {
             //----------------Not Found Error--------------------//
             Alert alert = new Alert(Alert.AlertType.ERROR);
