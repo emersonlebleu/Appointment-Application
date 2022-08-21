@@ -84,7 +84,6 @@ public class Appointments implements Initializable {
     private model.Appointment selectedAppointment;
     private static String startStyle;
 
-
     /** Function refreshes date in the appointments table */
     private void setApptTable(){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
@@ -96,7 +95,7 @@ public class Appointments implements Initializable {
 
         Iterator<Appointment> itr = appointments.iterator();
 
-        if (weekRadio.isSelected()){
+        if (weekRadio != null && weekRadio.isSelected()){
             for (Iterator<Appointment> it = itr; it.hasNext();) {
                 Appointment appointment = it.next();
                 switch (LocalDateTime.now().getDayOfWeek()){
@@ -137,7 +136,7 @@ public class Appointments implements Initializable {
                         break;
                 }
             }
-        } else if (monthRadio.isSelected()){
+        } else if (monthRadio != null && monthRadio.isSelected()){
             for (Iterator<Appointment> it = itr; it.hasNext();){
                 Appointment appointment = it.next();
                 if (appointment.getStart().getMonth().equals(LocalDateTime.now().getMonth())) {

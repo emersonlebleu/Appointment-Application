@@ -18,6 +18,14 @@ public class Customer {
         this.phone = phone;
         this.division = division;
     }
+    /** Customer constructor for input into db. */
+    public Customer(String name, String address, String postalCode, String phone, int division){
+        this.name = name;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.phone = phone;
+        this.division = division;
+    }
     /** Get the id of the customer.
      * @return the id of the customer */
     public int getId() {

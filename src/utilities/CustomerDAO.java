@@ -1,5 +1,6 @@
 package utilities;
 
+import controller.Login;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
@@ -7,6 +8,9 @@ import model.Customer;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /** CRUD for customer interaction */
 public abstract class CustomerDAO {
@@ -14,15 +18,20 @@ public abstract class CustomerDAO {
     /** Adds a new customer to the DB.
      * @param customer a customer to be added to the DB. */
     public static void addCustomer(model.Customer customer) throws SQLException {
-        String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Division_ID) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = JDBC.conn.prepareStatement(sql);
         ps.setString(1, customer.getName());
         ps.setString(2, customer.getAddress());
         ps.setString(3, customer.getPostalCode());
         ps.setString(4, customer.getPhone());
-        ps.setInt(5, customer.getDivision());
+        ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        String createdBy = "ScheduleAppUser: " + Login.currUser.getName();
+        ps.setString(6, createdBy);
+        ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        ps.setString(8, createdBy);
+        ps.setInt(9, customer.getDivision());
 
-        ps.executeQuery();
+        ps.executeUpdate();
     }
 
     /** gets a customer from the database by ID.
@@ -46,17 +55,20 @@ public abstract class CustomerDAO {
     /** Update a customer given a customer object.
      * @param customer a customer object to set values to. */
     public static void updateCustomer(model.Customer customer) throws SQLException{
-        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
+        String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = ?, Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?";
 
         PreparedStatement ps = JDBC.conn.prepareStatement(sql);
         ps.setString(1, customer.getName());
         ps.setString(2, customer.getAddress());
         ps.setString(3, customer.getPostalCode());
         ps.setString(4, customer.getPhone());
-        ps.setInt(5, customer.getDivision());
-        ps.setInt(6, customer.getId());
+        ps.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now().atZone(CurrentSession.getZone()).withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime()));
+        String createdBy = "ScheduleAppUser: " + Login.currUser.getName();
+        ps.setString(6, createdBy);
+        ps.setInt(7, customer.getDivision());
+        ps.setInt(8, customer.getId());
 
-        ResultSet rs = ps.executeQuery();
+        ps.executeUpdate();
     }
 
     /** Delete a given customer by id. */
@@ -65,7 +77,7 @@ public abstract class CustomerDAO {
 
         PreparedStatement ps = JDBC.conn.prepareStatement(sql);
         ps.setString(1, String.valueOf(id));
-        ResultSet rs = ps.executeQuery();
+        ps.executeUpdate();
     }
 
     /** Get all customers in database and output to a list object.

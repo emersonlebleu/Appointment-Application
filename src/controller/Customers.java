@@ -15,7 +15,9 @@ import utilities.*;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
@@ -73,6 +75,22 @@ public class Customers implements Initializable {
     }
 
     public void onSaveAdd(ActionEvent actionEvent) {
+        String name = nameField.getText();
+        String address = addressField.getText();
+        String postal = postalField.getText();
+        String phone = phoneField.getText();
+        Integer firstLevId = firstLevDropD.getValue().getId();
+
+        model.Customer newCust = new Customer(name, address, postal, phone, firstLevId);
+        try {
+            CustomerDAO.addCustomer(newCust);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        setCustTable();
+        clearAddFormFields();
+        homePane.toFront();
     }
 
     public void onCancelAdd(ActionEvent actionEvent) {
@@ -103,6 +121,31 @@ public class Customers implements Initializable {
     }
 
     public void delete_cust(ActionEvent actionEvent) {
+        selectedCustomer = (Customer) custTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCustomer == null) {
+            //----------------No Selection Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("No Selection");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText("Please make a selection to delete a customer.");
+
+            alert.showAndWait();
+        } else {
+            try {
+                ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+                for (Appointment appointment: appointments) {
+                    if (appointment.getCustomer() == selectedCustomer.getId()){
+                        AppointmentDAO.deleteAppointment(appointment.getId());
+                    }
+                }
+            } catch (Exception e) { System.out.println(e);}
+            try {
+                CustomerDAO.deleteCustomer(selectedCustomer.getId());
+            } catch (Exception e) { System.out.println(e);}
+        }
+        setCustTable();
     }
 
     public void mouseOvAdd(MouseEvent mouseEvent) {
