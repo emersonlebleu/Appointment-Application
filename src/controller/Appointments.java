@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.StageStyle;
 import model.Appointment;
 import model.Contact;
 import model.Customer;
@@ -250,7 +251,6 @@ public class Appointments implements Initializable {
     }
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         allRadio.setToggleGroup(viewToggle);
@@ -268,53 +268,66 @@ public class Appointments implements Initializable {
     }
 
     public void mod_appt(ActionEvent actionEvent) {
-        selectedAppointment = (model.Appointment) apptTable.getSelectionModel().getSelectedItem();
+        selectedAppointment = (Appointment) apptTable.getSelectionModel().getSelectedItem();
 
-        refreshDropdowns();
-        modIdField.setText(String.valueOf(selectedAppointment.getId()));
-        modTitleField.setText(selectedAppointment.getTitle());
-        modDescriptionField.setText(selectedAppointment.getDescription());
-        modLocationField.setText(selectedAppointment.getLocation());
-        modTypeField.setText(selectedAppointment.getType());
+        if (selectedAppointment == null) {
+            //----------------No Selection Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("No Selection");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText("Please make a selection.");
+
+            alert.showAndWait();
+        } else {
+            refreshDropdowns();
+            modIdField.setText(String.valueOf(selectedAppointment.getId()));
+            modTitleField.setText(selectedAppointment.getTitle());
+            modDescriptionField.setText(selectedAppointment.getDescription());
+            modLocationField.setText(selectedAppointment.getLocation());
+            modTypeField.setText(selectedAppointment.getType());
 
 
-        //Times Getting local date & time together
-        LocalDate startDate = selectedAppointment.getStart().toLocalDate();
-        LocalTime startTime = selectedAppointment.getStart().toLocalTime();
-        LocalDate endDate = selectedAppointment.getEnd().toLocalDate();
-        LocalTime endTime = selectedAppointment.getEnd().toLocalTime();
+            //Times Getting local date & time together
+            LocalDate startDate = selectedAppointment.getStart().toLocalDate();
+            LocalTime startTime = selectedAppointment.getStart().toLocalTime();
+            LocalDate endDate = selectedAppointment.getEnd().toLocalDate();
+            LocalTime endTime = selectedAppointment.getEnd().toLocalTime();
 
-        modStartDateP.setValue(startDate);
-        modStartTime.getSelectionModel().select(startTime);
-        modEndDateP.setValue(endDate);
-        modEndTime.getSelectionModel().select(endTime);
+            modStartDateP.setValue(startDate);
+            modStartTime.getSelectionModel().select(startTime);
+            modEndDateP.setValue(endDate);
+            modEndTime.getSelectionModel().select(endTime);
 
-        Customer currCustomer = null;
-        for (Customer customer: customers) {
-            if (customer.getId() == selectedAppointment.getCustomer()){
-                currCustomer = customer;
+            Customer currCustomer = null;
+            for (Customer customer: customers) {
+                if (customer.getId() == selectedAppointment.getCustomer()){
+                    currCustomer = customer;
+                }
             }
+
+            User currUser = null;
+            for (User user: users) {
+                if (user.getId() == selectedAppointment.getUser()){
+                    currUser = user;
+                }
+            }
+
+            Contact currContact = null;
+            for (Contact contact: contacts) {
+                if (contact.getId() == selectedAppointment.getContact()){
+                    currContact = contact;
+                }
+            }
+
+            modCustDropD.getSelectionModel().select(currCustomer);
+            modUserDropD.getSelectionModel().select(currUser);
+            modContactDropD.getSelectionModel().select(currContact);
+
+            modPane.toFront();
         }
 
-        User currUser = null;
-        for (User user: users) {
-            if (user.getId() == selectedAppointment.getUser()){
-                currUser = user;
-            }
-        }
 
-        Contact currContact = null;
-        for (Contact contact: contacts) {
-            if (contact.getId() == selectedAppointment.getContact()){
-                currContact = contact;
-            }
-        }
-
-        modCustDropD.getSelectionModel().select(currCustomer);
-        modUserDropD.getSelectionModel().select(currUser);
-        modContactDropD.getSelectionModel().select(currContact);
-
-        modPane.toFront();
     }
 
     public void delete_appt(ActionEvent actionEvent) {
