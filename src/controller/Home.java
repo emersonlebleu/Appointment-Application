@@ -57,7 +57,7 @@ public class Home implements Initializable {
      * button styles appropriately to display active current page via button color. */
     public void custBtnPress(ActionEvent actionEvent) {
         contactsPane.toFront();
-        pageLabel.setText("Contacts");
+        pageLabel.setText("Customers");
 
         apptButton.setStyle("-fx-background-color: #3F4464;");
         reportButton.setStyle("-fx-background-color: #3F4464;");
