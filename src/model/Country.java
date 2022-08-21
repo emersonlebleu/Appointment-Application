@@ -30,4 +30,10 @@ public class Country {
     public void setName(String name) {
         this.name = name;
     }
+
+    /** Override toString in order to get appropriate display on combo boxes */
+    @Override
+    public String toString(){
+        return (name);
+    }
 }

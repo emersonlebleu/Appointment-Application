@@ -42,4 +42,10 @@ public class Division {
     public void setCountry(int country) {
         this.country = country;
     }
+
+    /** Override toString in order to get appropriate display on combo boxes */
+    @Override
+    public String toString(){
+        return (name);
+    }
 }
