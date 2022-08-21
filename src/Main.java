@@ -35,6 +35,5 @@ public class Main extends Application {
         JDBC.connect();
         launch();
         JDBC.disconnect();
-
     }
 }
