@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.io.*;
 
 /** Login Controller. */
 public class Login implements Initializable {
@@ -40,6 +41,8 @@ public class Login implements Initializable {
     public Label langText;
 
     public static model.User currUser;
+
+
     public static model.User getUser(){
         return currUser;
     }
@@ -101,9 +104,15 @@ public class Login implements Initializable {
     /** Login button pressed, gather username and password and validate against DB.
      * Loads the main page if successfull, displays error if not. */
     public void onLogin(ActionEvent actionEvent) throws SQLException, IOException {
+        FileWriter fw = new FileWriter("login_activity.txt", true);
+        PrintWriter pw = new PrintWriter(fw);
+
         if (UserDAO.validateUser(usernameField.getText(), passwordField.getText())){
             Integer id = UserDAO.getUserId(usernameField.getText(), passwordField.getText());
             currUser = UserDAO.getUser(id);
+
+            pw.println("Attempt with username: " + usernameField.getText() + " at " + LocalDateTime.now() + " Status: SUCCESS");
+            pw.close();
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/view/home.fxml")));
             Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
@@ -128,6 +137,8 @@ public class Login implements Initializable {
             } else {
                 alert.setContentText("Sorry, Username/Password combination not found.");
             }
+            pw.println("Attempt with username: " + usernameField.getText() + " at " + LocalDateTime.now() + " Status: FAIL");
+            pw.close();
             alert.showAndWait();
         }
     }
