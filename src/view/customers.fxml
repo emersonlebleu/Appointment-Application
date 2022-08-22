@@ -13,9 +13,9 @@
     <children>
         <StackPane fx:id="custStack" layoutX="-1.0" prefHeight="553.0" prefWidth="663.0">
             <children>
-                <AnchorPane id="modPane" fx:id="modPane" prefHeight="200.0" prefWidth="200.0">
+                <AnchorPane id="addPane" fx:id="addPane" prefHeight="200.0" prefWidth="200.0">
                     <children>
-                        <AnchorPane id="Form" layoutX="147.0" layoutY="63.0" prefHeight="396.0" prefWidth="387.0">
+                        <AnchorPane id="Form" layoutX="147.0" layoutY="63.0" prefHeight="351.0" prefWidth="387.0">
                             <children>
                                 <Label layoutX="37.0" layoutY="43.0" text="Customer ID" />
                                 <Label layoutX="37.0" layoutY="73.0" text="Name" />
@@ -24,23 +24,23 @@
                                 <Label layoutX="37.0" layoutY="161.0" text="Phone Number" />
                                 <Label layoutX="37.0" layoutY="188.0" text="Country" />
                                 <Label layoutX="37.0" layoutY="217.0" text="First Level Division" />
-                                <TextField id="modIdField" fx:id="modIdField" editable="false" layoutX="142.0" layoutY="39.0" prefHeight="25.0" prefWidth="61.0" promptText="auto" />
-                                <TextField id="modNameField" fx:id="modNameField" layoutX="142.0" layoutY="69.0" prefHeight="25.0" prefWidth="168.0" />
-                                <TextField id="modAddressField" fx:id="modAddressField" layoutX="142.0" layoutY="97.0" prefHeight="25.0" prefWidth="168.0" />
-                                <TextField id="modPostalField" fx:id="modPostalField" layoutX="142.0" layoutY="125.0" prefHeight="25.0" prefWidth="168.0" />
-                                <TextField id="modPhoneField" fx:id="modPhoneField" layoutX="142.0" layoutY="184.0" prefHeight="25.0" prefWidth="125.0" />
-                                <ComboBox id="modCountryDropD" fx:id="modCountryDropD" layoutX="98.0" layoutY="275.0" prefHeight="25.0" onAction="#countryDropDChangeMod" prefWidth="111.0" />
-                                <ComboBox id="modFirstLevDropD" fx:id="modFirstLevDropD" layoutX="98.0" layoutY="305.0" prefHeight="25.0" prefWidth="111.0" />
-                                <Button fx:id="saveMod" layoutX="186.0" layoutY="347.0" mnemonicParsing="false" onAction="#onSaveMod" prefHeight="25.0" prefWidth="61.0" text="Save" />
-                                <Button fx:id="cancelMod" layoutX="258.0" layoutY="347.0" mnemonicParsing="false" onAction="#onCancelMod" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
-                                <Label layoutX="250.0" layoutY="14.0" prefHeight="17.0" prefWidth="111.0" text="Modify Customer" />
+                                <TextField id="idField" fx:id="idField" editable="false" layoutX="147.0" layoutY="39.0" prefHeight="25.0" prefWidth="61.0" promptText="auto" />
+                                <TextField id="nameField" fx:id="nameField" layoutX="148.0" layoutY="69.0" prefHeight="25.0" prefWidth="168.0" />
+                                <TextField id="addressField" fx:id="addressField" layoutX="148.0" layoutY="97.0" prefHeight="25.0" prefWidth="168.0" />
+                                <TextField id="postalField" fx:id="postalField" layoutX="148.0" layoutY="125.0" prefHeight="25.0" prefWidth="168.0" />
+                                <TextField id="phoneField" fx:id="phoneField" layoutX="147.0" layoutY="157.0" prefHeight="25.0" prefWidth="125.0" />
+                                <ComboBox id="countryDropD" fx:id="countryDropD" layoutX="148.0" layoutY="186.0" onAction="#countryDropDChangeAdd" prefHeight="25.0" prefWidth="111.0" />
+                                <ComboBox id="firstLevDropD" fx:id="firstLevDropD" layoutX="148.0" layoutY="213.0" prefHeight="25.0" prefWidth="111.0" />
+                                <Button fx:id="saveAdd" layoutX="135.0" layoutY="287.0" mnemonicParsing="false" onAction="#onSaveAdd" prefHeight="25.0" prefWidth="61.0" text="Save" />
+                                <Button fx:id="cancelAdd" layoutX="220.0" layoutY="287.0" mnemonicParsing="false" onAction="#onCancelAdd" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
+                                <Label layoutX="260.0" layoutY="14.0" prefHeight="17.0" prefWidth="101.0" text="Add Customer" />
                             </children>
                         </AnchorPane>
                     </children>
                 </AnchorPane>
-                <AnchorPane id="addPane" fx:id="addPane" prefHeight="200.0" prefWidth="200.0">
+                <AnchorPane id="modPane" fx:id="modPane" prefHeight="200.0" prefWidth="200.0">
                     <children>
-                        <AnchorPane id="Form" layoutX="147.0" layoutY="63.0" prefHeight="396.0" prefWidth="387.0">
+                        <AnchorPane id="Form" layoutX="147.0" layoutY="63.0" prefHeight="351.0" prefWidth="387.0">
                             <children>
                                 <Label layoutX="37.0" layoutY="43.0" text="Customer ID" />
                                 <Label layoutX="37.0" layoutY="73.0" text="Name" />
@@ -49,16 +49,16 @@
                                 <Label layoutX="37.0" layoutY="161.0" text="Phone Number" />
                                 <Label layoutX="37.0" layoutY="188.0" text="Country" />
                                 <Label layoutX="37.0" layoutY="217.0" text="First Level Division" />
-                                <TextField id="idField" fx:id="idField" editable="false" layoutX="142.0" layoutY="39.0" prefHeight="25.0" prefWidth="61.0" promptText="auto" />
-                                <TextField id="nameField" fx:id="nameField" layoutX="142.0" layoutY="69.0" prefHeight="25.0" prefWidth="168.0" />
-                                <TextField id="addressField" fx:id="addressField" layoutX="142.0" layoutY="97.0" prefHeight="25.0" prefWidth="168.0" />
-                                <TextField id="postalField" fx:id="postalField" layoutX="142.0" layoutY="125.0" prefHeight="25.0" prefWidth="168.0" />
-                                <TextField id="phoneField" fx:id="phoneField" layoutX="142.0" layoutY="184.0" prefHeight="25.0" prefWidth="125.0" />
-                                <ComboBox id="countryDropD" fx:id="countryDropD" layoutX="98.0" layoutY="275.0" prefHeight="25.0" onAction="#countryDropDChangeAdd" prefWidth="111.0" />
-                                <ComboBox id="firstLevDropD" fx:id="firstLevDropD" layoutX="98.0" layoutY="305.0" prefHeight="25.0" prefWidth="111.0" />
-                                <Button fx:id="saveAdd" layoutX="186.0" layoutY="347.0" mnemonicParsing="false" onAction="#onSaveAdd" prefHeight="25.0" prefWidth="61.0" text="Save" />
-                                <Button fx:id="cancelAdd" layoutX="258.0" layoutY="347.0" mnemonicParsing="false" onAction="#onCancelAdd" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
-                                <Label layoutX="260.0" layoutY="14.0" prefHeight="17.0" prefWidth="101.0" text="Add Customer" />
+                                <TextField id="modIdField" fx:id="modIdField" editable="false" layoutX="148.0" layoutY="39.0" prefHeight="25.0" prefWidth="61.0" promptText="auto" />
+                                <TextField id="modNameField" fx:id="modNameField" layoutX="148.0" layoutY="69.0" prefHeight="25.0" prefWidth="168.0" />
+                                <TextField id="modAddressField" fx:id="modAddressField" layoutX="148.0" layoutY="97.0" prefHeight="25.0" prefWidth="168.0" />
+                                <TextField id="modPostalField" fx:id="modPostalField" layoutX="148.0" layoutY="125.0" prefHeight="25.0" prefWidth="168.0" />
+                                <TextField id="modPhoneField" fx:id="modPhoneField" layoutX="148.0" layoutY="157.0" prefHeight="25.0" prefWidth="125.0" />
+                                <ComboBox id="modCountryDropD" fx:id="modCountryDropD" layoutX="148.0" layoutY="186.0" onAction="#countryDropDChangeMod" prefHeight="25.0" prefWidth="111.0" />
+                                <ComboBox id="modFirstLevDropD" fx:id="modFirstLevDropD" layoutX="148.0" layoutY="213.0" prefHeight="25.0" prefWidth="111.0" />
+                                <Button fx:id="saveMod" layoutX="135.0" layoutY="287.0" mnemonicParsing="false" onAction="#onSaveMod" prefHeight="25.0" prefWidth="61.0" text="Save" />
+                                <Button fx:id="cancelMod" layoutX="220.0" layoutY="287.0" mnemonicParsing="false" onAction="#onCancelMod" prefHeight="25.0" prefWidth="61.0" text="Cancel" />
+                                <Label layoutX="250.0" layoutY="14.0" prefHeight="17.0" prefWidth="111.0" text="Modify Customer" />
                             </children>
                         </AnchorPane>
                     </children>
