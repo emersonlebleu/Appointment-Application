@@ -69,23 +69,42 @@ public class Customers implements Initializable {
     }
 
     public void onSaveMod(ActionEvent actionEvent) {
-        Integer id = Integer.valueOf(modIdField.getText());
-        String name = modNameField.getText();
-        String address = modAddressField.getText();
-        String postal = modPostalField.getText();
-        String phone = modPhoneField.getText();
-        Integer firstLevId = modFirstLevDropD.getValue().getId();
+        if (validateMod() == null){
+            Integer id = Integer.valueOf(modIdField.getText());
+            String name = modNameField.getText();
+            String address = modAddressField.getText();
+            String postal = modPostalField.getText();
+            String phone = modPhoneField.getText();
+            Integer firstLevId = modFirstLevDropD.getValue().getId();
 
-        model.Customer newCust = new Customer(id, name, address, postal, phone, firstLevId);
-        try {
-            CustomerDAO.updateCustomer(newCust);
-        } catch (Exception e) {
-            System.out.println(e);
+            model.Customer newCust = new Customer(id, name, address, postal, phone, firstLevId);
+            try {
+                CustomerDAO.updateCustomer(newCust);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            setCustTable();
+            clearFormFields();
+            homePane.toFront();
+
+            modNameField.setStyle(null);
+            modAddressField.setStyle(null);
+            modPostalField.setStyle(null);
+            modPhoneField.setStyle(null);
+            modCountryDropD.setStyle(null);
+            modFirstLevDropD.setStyle(null);
+        } else {
+            //----------------Non valid Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Form Submit Error");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText(validateMod());
+
+            alert.showAndWait();
         }
 
-        setCustTable();
-        clearFormFields();
-        homePane.toFront();
     }
 
     public void onCancelMod(ActionEvent actionEvent) {
@@ -93,22 +112,40 @@ public class Customers implements Initializable {
     }
 
     public void onSaveAdd(ActionEvent actionEvent) {
-        String name = nameField.getText();
-        String address = addressField.getText();
-        String postal = postalField.getText();
-        String phone = phoneField.getText();
-        Integer firstLevId = firstLevDropD.getValue().getId();
+        if (validateAdd() == null){
+            String name = nameField.getText();
+            String address = addressField.getText();
+            String postal = postalField.getText();
+            String phone = phoneField.getText();
+            Integer firstLevId = firstLevDropD.getValue().getId();
 
-        model.Customer newCust = new Customer(name, address, postal, phone, firstLevId);
-        try {
-            CustomerDAO.addCustomer(newCust);
-        } catch (Exception e) {
-            System.out.println(e);
+            model.Customer newCust = new Customer(name, address, postal, phone, firstLevId);
+            try {
+                CustomerDAO.addCustomer(newCust);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            setCustTable();
+            clearFormFields();
+            homePane.toFront();
+
+            nameField.setStyle(null);
+            addressField.setStyle(null);
+            postalField.setStyle(null);
+            phoneField.setStyle(null);
+            countryDropD.setStyle(null);
+            firstLevDropD.setStyle(null);
+        } else {
+            //----------------Non valid Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Form Submit Error");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText(validateAdd());
+
+            alert.showAndWait();
         }
-
-        setCustTable();
-        clearFormFields();
-        homePane.toFront();
     }
 
     public void onCancelAdd(ActionEvent actionEvent) {
@@ -358,5 +395,104 @@ public class Customers implements Initializable {
             selCountryId = null;
         }
         refreshDivisions();
+    }
+
+    private String validateAdd(){
+        nameField.setStyle(null);
+        addressField.setStyle(null);
+        postalField.setStyle(null);
+        phoneField.setStyle(null);
+        countryDropD.setStyle(null);
+        firstLevDropD.setStyle(null);
+
+        String errorM = "The following errors were found:\n\n";
+        String noErrorM = null;
+        Boolean err = false;
+
+        if (nameField.getText() == ""){
+            errorM += "- Name field must be populated.\n";
+            nameField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (addressField.getText() == ""){
+            errorM += "- Address field must be populated.\n";
+            addressField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (postalField.getText() == ""){
+            errorM += "- Postal Code field must be populated.\n";
+            postalField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (phoneField.getText() == ""){
+            errorM += "- Phone field must be populated.\n";
+            phoneField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (countryDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A country must be selected.\n";
+            countryDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (firstLevDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A first level division must be selected.\n";
+            firstLevDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (!err) {
+            return noErrorM;
+        } else {
+            return errorM;
+        }
+    }
+
+    private String validateMod(){
+        modNameField.setStyle(null);
+        modAddressField.setStyle(null);
+        modPostalField.setStyle(null);
+        modPhoneField.setStyle(null);
+        modCountryDropD.setStyle(null);
+        modFirstLevDropD.setStyle(null);
+
+        String errorM = "The following errors were found:\n\n";
+        String noErrorM = null;
+        Boolean err = false;
+
+        if (modNameField.getText() == ""){
+            errorM += "- Name field must be populated.\n";
+            modNameField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modAddressField.getText() == ""){
+            errorM += "- Address field must be populated.\n";
+            modAddressField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modPostalField.getText() == ""){
+            errorM += "- Postal Code field must be populated.\n";
+            modPostalField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modPhoneField.getText() == ""){
+            errorM += "- Phone field must be populated.\n";
+            modPhoneField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modCountryDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A country must be selected.\n";
+            modCountryDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modFirstLevDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A first level division must be selected.\n";
+            modFirstLevDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+
+        if (!err) {
+            return noErrorM;
+        } else {
+            return errorM;
+        }
     }
 }
