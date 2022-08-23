@@ -12,11 +12,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import utilities.Static;
+import utilities.State;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /** Main window controller. */
@@ -43,14 +42,14 @@ public class Home implements Initializable {
         userNameLabel.setText(Login.currUser.getName());
         apptButton.setStyle("-fx-background-color: #8E94B8;");
 
-        if (Static.infront != null && Static.infront.equals("Appointments")){
+        if (State.infront != null && State.infront.equals("Appointments")){
             pageLabel.setText("Appointments");
             reportButton.setStyle("-fx-background-color: #3F4464;");
             custButton.setStyle("-fx-background-color: #3F4464;");
             apptButton.setStyle("-fx-background-color: #8E94B8;");
             startStyle = apptButton.getStyle();
             appointmentsPane.toFront();
-        } else if (Static.infront != null && Static.infront.equals("Customers")) {
+        } else if (State.infront != null && State.infront.equals("Customers")) {
             pageLabel.setText("Customers");
 
             apptButton.setStyle("-fx-background-color: #3F4464;");
@@ -58,7 +57,7 @@ public class Home implements Initializable {
             custButton.setStyle("-fx-background-color: #8E94B8;");
             startStyle = custButton.getStyle();
             customerPane.toFront();
-        } else if (Static.infront != null && Static.infront.equals("Reports")){
+        } else if (State.infront != null && State.infront.equals("Reports")){
             pageLabel.setText("Reports");
 
             custButton.setStyle("-fx-background-color: #3F4464;");
@@ -74,7 +73,7 @@ public class Home implements Initializable {
     /** Appointment button pressed. Brings appropriate frame to front, changes page label, sets
      * button styles appropriately to display active current page via button color. */
     public void apptBtnPress(ActionEvent actionEvent) throws IOException {
-        Static.infront = "Appointments";
+        State.infront = "Appointments";
         Parent root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
 
@@ -87,7 +86,7 @@ public class Home implements Initializable {
     /** Customers button pressed. Brings appropriate frame to front, changes page label, sets
      * button styles appropriately to display active current page via button color. */
     public void custBtnPress(ActionEvent actionEvent) throws IOException {
-        Static.infront = "Customers";
+        State.infront = "Customers";
         Parent root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
 
@@ -100,7 +99,7 @@ public class Home implements Initializable {
     /** Report button pressed. Brings appropriate frame to front, changes page label, sets
      * button styles appropriately to display active current page via button color. */
     public void reportBtnPress(ActionEvent actionEvent) throws IOException {
-        Static.infront = "Reports";
+        State.infront = "Reports";
         Parent root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
         Stage stage = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
 

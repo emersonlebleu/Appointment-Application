@@ -1,5 +1,5 @@
 package utilities;
 
-public class Static {
+public class State {
     public static String infront;
 }
