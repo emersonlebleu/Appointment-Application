@@ -38,7 +38,7 @@ public abstract class CustomerDAO {
      * @param id a particular customer id.
      * @return a customer object with values from DB. */
     public static model.Customer getCustomer(Integer id) throws SQLException{
-        String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID FROM appointments WHERE Appointment_ID = ?";
+        String sql = "SELECT Customer_ID, Customer_Name, Address, Postal_Code, Phone, Division_ID FROM customers WHERE Customer_ID = ?";
 
         PreparedStatement ps = JDBC.conn.prepareStatement(sql);
         ps.setInt(1, id);
