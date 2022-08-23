@@ -20,7 +20,7 @@
       </AnchorPane>
       <StackPane id="stackPane" fx:id="stackPane" layoutX="137.0" layoutY="47.0" prefHeight="553.0" prefWidth="663.0">
          <children>
-            <fx:include fx:id="contactsPane" source="customers.fxml"/>
+            <fx:include fx:id="customerPane" source="customers.fxml"/>
             <fx:include fx:id="reportsPane" source="reports.fxml"/>
             <fx:include fx:id="appointmentsPane" source="appointments.fxml"/>
          </children>

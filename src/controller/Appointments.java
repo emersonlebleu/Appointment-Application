@@ -84,6 +84,10 @@ public class Appointments implements Initializable {
     private model.Appointment selectedAppointment;
     private static String startStyle;
 
+    public TableView getApptTable(){
+        return apptTable;
+    }
+
     /** Function refreshes date in the appointments table */
     private void setApptTable(){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
@@ -249,7 +253,6 @@ public class Appointments implements Initializable {
         userDropD.getSelectionModel().clearSelection();
         contactDropD.getSelectionModel().clearSelection();
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
