@@ -15,16 +15,11 @@ import model.Appointment;
 import model.Contact;
 import model.Customer;
 import model.User;
-import utilities.AppointmentDAO;
-import utilities.ContactDAO;
-import utilities.CustomerDAO;
-import utilities.UserDAO;
+import utilities.*;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -409,75 +404,98 @@ public class Appointments implements Initializable {
         homePane.toFront();
     }
 
-    public void onSaveAdd(ActionEvent actionEvent) {
+    public void onSaveAdd(ActionEvent actionEvent) throws SQLException {
+        if (validateAdd() == null) {
+            String title = titleField.getText();
+            String description = descriptionField.getText();
+            String location = locationField.getText();
+            String type = typeField.getText();
 
-        String title = titleField.getText();
-        String description = descriptionField.getText();
-        String location = locationField.getText();
-        String type = typeField.getText();
 
+            //Times Getting local date & time together
+            LocalDate startDate = startDateP.getValue();
+            LocalTime startTime = addStartTime.getValue();
+            LocalDate endDate = endDateP.getValue();
+            LocalTime endTime = addEndTime.getValue();
 
-        //Times Getting local date & time together
-        LocalDate startDate = startDateP.getValue();
-        LocalTime startTime = addStartTime.getValue();
-        LocalDate endDate = endDateP.getValue();
-        LocalTime endTime = addEndTime.getValue();
+            LocalDateTime start = LocalDateTime.of(startDate, startTime);
+            LocalDateTime end = LocalDateTime.of(endDate, endTime);
 
-        LocalDateTime start = LocalDateTime.of(startDate, startTime);
-        LocalDateTime end = LocalDateTime.of(endDate, endTime);
+            Integer customerId = custDropD.getValue().getId();
+            Integer userId = userDropD.getValue().getId();
+            Integer contactId = contactDropD.getValue().getId();
 
-        Integer customerId = custDropD.getValue().getId();
-        Integer userId = userDropD.getValue().getId();
-        Integer contactId = contactDropD.getValue().getId();
+            model.Appointment newAppt = new Appointment(title, description, location, type, start, end, customerId, userId, contactId);
+            try {
+                AppointmentDAO.addAppointment(newAppt);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
 
-        model.Appointment newAppt = new Appointment(title, description, location, type, start, end, customerId, userId, contactId);
-        try {
-            AppointmentDAO.addAppointment(newAppt);
-        } catch (Exception e) {
-            System.out.println(e);
+            setApptTable();
+            clearAddFormFields();
+            homePane.toFront();
+        } else {
+            //----------------Non valid Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Form Submit Error");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText(validateAdd());
+
+            alert.showAndWait();
         }
 
-        setApptTable();
-        clearAddFormFields();
-        homePane.toFront();
     }
 
     public void onCancelMod(ActionEvent actionEvent) {
         homePane.toFront();
     }
 
-    public void onSaveMod(ActionEvent actionEvent) {
-        Integer id = Integer.parseInt(modIdField.getText());
-        String title = modTitleField.getText();
-        String description = modDescriptionField.getText();
-        String location = modLocationField.getText();
-        String type = modTypeField.getText();
+    public void onSaveMod(ActionEvent actionEvent) throws SQLException {
+        if (validateMod() == null) {
+            Integer id = Integer.parseInt(modIdField.getText());
+            String title = modTitleField.getText();
+            String description = modDescriptionField.getText();
+            String location = modLocationField.getText();
+            String type = modTypeField.getText();
 
 
-        //Times Getting local date & time together
-        LocalDate startDate = modStartDateP.getValue();
-        LocalTime startTime = modStartTime.getValue();
-        LocalDate endDate = modEndDateP.getValue();
-        LocalTime endTime = modEndTime.getValue();
+            //Times Getting local date & time together
+            LocalDate startDate = modStartDateP.getValue();
+            LocalTime startTime = modStartTime.getValue();
+            LocalDate endDate = modEndDateP.getValue();
+            LocalTime endTime = modEndTime.getValue();
 
-        LocalDateTime start = LocalDateTime.of(startDate, startTime);
-        LocalDateTime end = LocalDateTime.of(endDate, endTime);
+            LocalDateTime start = LocalDateTime.of(startDate, startTime);
+            LocalDateTime end = LocalDateTime.of(endDate, endTime);
 
-        Integer customerId = modCustDropD.getValue().getId();
-        Integer userId = modUserDropD.getValue().getId();
-        Integer contactId = modContactDropD.getValue().getId();
+            Integer customerId = modCustDropD.getValue().getId();
+            Integer userId = modUserDropD.getValue().getId();
+            Integer contactId = modContactDropD.getValue().getId();
 
-        model.Appointment newAppt = new Appointment(id, title, description, location, type, start, end, customerId, userId, contactId);
-        try {
-            AppointmentDAO.updateAppointment(newAppt);
-            System.out.println("Updated!");
-        } catch (Exception e) {
-            System.out.println(e);
+            model.Appointment newAppt = new Appointment(id, title, description, location, type, start, end, customerId, userId, contactId);
+            try {
+                AppointmentDAO.updateAppointment(newAppt);
+                System.out.println("Updated!");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            setApptTable();
+            clearAddFormFields();
+            homePane.toFront();
+        } else {
+            //----------------Non valid Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Form Submit Error");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText(validateMod());
+
+            alert.showAndWait();
         }
 
-        setApptTable();
-        clearAddFormFields();
-        homePane.toFront();
     }
 
     public void onMonth(ActionEvent actionEvent) {
@@ -491,4 +509,298 @@ public class Appointments implements Initializable {
     public void onAll(ActionEvent actionEvent) {
         setApptTable();
     }
+
+    private String validateAdd() throws SQLException {
+        titleField.setStyle(null);
+        descriptionField.setStyle(null);
+        locationField.setStyle(null);
+        typeField.setStyle(null);
+        contactDropD.setStyle(null);
+        custDropD.setStyle(null);
+        startDateP.setStyle(null);
+        endDateP.setStyle(null);
+        addStartTime.setStyle(null);
+        addEndTime.setStyle(null);
+
+        String errorM = "The following errors were found:\n\n";
+        String timeErrorM = "The following schedule errors were found:\n\n";
+        String noErrorM = null;
+        Boolean err = false;
+        Boolean schErr = false;
+
+        if (titleField.getText() == ""){
+            errorM += "- Title field must be populated.\n";
+            titleField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (descriptionField.getText() == ""){
+            errorM += "- Description field must be populated.\n";
+            descriptionField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (locationField.getText() == ""){
+            errorM += "- Location field must be populated.\n";
+            locationField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (typeField.getText() == ""){
+            errorM += "- Type field must be populated.\n";
+            typeField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (contactDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A contact must be selected.\n";
+            contactDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (custDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A customer must be selected.\n";
+            custDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (userDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A user must be selected.\n";
+            userDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        //____________________________TIME_________________
+        ZoneOffset estOffset = ZoneId.of("US/Eastern").getRules().getOffset(Instant.now());
+        LocalTime st = LocalTime.parse("08:00");
+        LocalTime en = LocalTime.parse("22:00");
+        LocalTime startBus = OffsetTime.of(st, estOffset).withOffsetSameInstant(CurrentSession.getOS()).toLocalTime();
+        LocalTime endBus = OffsetTime.of(en, estOffset).withOffsetSameInstant(CurrentSession.getOS()).toLocalTime();
+
+        if (startDateP.getValue() == null){
+            errorM += "- A start date must be selected.\n";
+            startDateP.setStyle("-fx-border-color: red");
+            err = true;
+        }
+
+        if (endDateP.getValue() == null){
+            errorM += "- An end time must be selected.\n";
+            endDateP.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (addStartTime.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A start time must be selected.\n";
+            addStartTime.setStyle("-fx-border-color: red");
+            err = true;
+        } else {
+            if(addStartTime.getValue().isBefore(startBus) || addStartTime.getValue().isAfter(endBus)){
+                timeErrorM += "- Start time must be between 8am EST & 10pm EST.\n";
+                addStartTime.setStyle("-fx-border-color: red");
+                schErr = true;
+            }
+        }
+        if (addEndTime.getSelectionModel().getSelectedItem() == null){
+            errorM += "- An end time must be selected.\n";
+            addEndTime.setStyle("-fx-border-color: red");
+            err = true;
+        } else {
+            if(addEndTime.getValue().isBefore(startBus) || addEndTime.getValue().isAfter(endBus)){
+                timeErrorM += "- End time must be between 8am EST & 10pm EST.\n";
+                addEndTime.setStyle("-fx-border-color: red");
+                schErr = true;
+            }
+        }
+
+        //Times Getting local date & time together
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (startDateP.getValue() != null && addStartTime.getValue() != null){
+            LocalDate startDate = startDateP.getValue();
+            LocalTime startTime = addStartTime.getValue();
+            start = LocalDateTime.of(startDate, startTime);
+        }
+
+        if (endDateP.getValue() != null && addEndTime.getValue() != null){
+            LocalDate endDate = endDateP.getValue();
+            LocalTime endTime = addEndTime.getValue();
+            end = LocalDateTime.of(endDate, endTime);
+        }
+
+        if (start != null && end != null){
+            if (start.isAfter(end)){
+                timeErrorM += "- Start date & time must be before end date & time.\n";
+                startDateP.setStyle("-fx-border-color: red");
+                addStartTime.setStyle("-fx-border-color: red");
+                endDateP.setStyle("-fx-border-color: red");
+                addEndTime.setStyle("-fx-border-color: red");
+                schErr = true;
+            } else {
+                ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+                for (Appointment appointment: appointments){
+                    if (appointment.getCustomer() == custDropD.getValue().getId()){
+                        if ((start.isBefore(appointment.getEnd()) && start.isAfter(appointment.getStart())) || (end.isAfter(appointment.getStart()) && end.isBefore(appointment.getEnd())) || (appointment.getEnd().isAfter(start) && appointment.getEnd().isBefore(end)) || (appointment.getStart().isAfter(start) && appointment.getStart().isBefore(end))) {
+                            timeErrorM += "-Customer number: " + String.valueOf(appointment.getCustomer()) + " has a conflict from " + appointment.getStartFormat() + " to " + appointment.getEndFormat() + ".\n";
+                            startDateP.setStyle("-fx-border-color: red");
+                            addStartTime.setStyle("-fx-border-color: red");
+                            endDateP.setStyle("-fx-border-color: red");
+                            addEndTime.setStyle("-fx-border-color: red");
+                            schErr = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!err && !schErr) {
+            return noErrorM;
+        } else if ( err && schErr) {
+            return errorM + "\n\n" + timeErrorM;
+        } else if (!err && schErr) {
+            return timeErrorM;
+        } else {
+            return errorM;
+        }
+    }
+
+    private String validateMod() throws SQLException {
+        modTitleField.setStyle(null);
+        modDescriptionField.setStyle(null);
+        modLocationField.setStyle(null);
+        modTypeField.setStyle(null);
+        modContactDropD.setStyle(null);
+        modCustDropD.setStyle(null);
+        modStartDateP.setStyle(null);
+        modEndDateP.setStyle(null);
+        modStartTime.setStyle(null);
+        modEndTime.setStyle(null);
+
+        String errorM = "The following errors were found:\n\n";
+        String timeErrorM = "The following schedule errors were found:\n\n";
+        String noErrorM = null;
+        Boolean err = false;
+        Boolean schErr = false;
+
+        if (modTitleField.getText() == ""){
+            errorM += "- Title field must be populated.\n";
+            modTitleField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modDescriptionField.getText() == ""){
+            errorM += "- Description field must be populated.\n";
+            modDescriptionField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modLocationField.getText() == ""){
+            errorM += "- Location field must be populated.\n";
+            modLocationField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modTypeField.getText() == ""){
+            errorM += "- Type field must be populated.\n";
+            modTypeField.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modContactDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A contact must be selected.\n";
+            modContactDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modCustDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A customer must be selected.\n";
+            modCustDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+        if (modUserDropD.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A user must be selected.\n";
+            modUserDropD.setStyle("-fx-border-color: red");
+            err = true;
+        }
+
+        //___________________TIME__________________________________
+        ZoneOffset estOffset = ZoneId.of("US/Eastern").getRules().getOffset(Instant.now());
+        LocalTime st = LocalTime.parse("08:00");
+        LocalTime en = LocalTime.parse("22:00");
+        LocalTime startBus = OffsetTime.of(st, estOffset).withOffsetSameInstant(CurrentSession.getOS()).toLocalTime();
+        LocalTime endBus = OffsetTime.of(en, estOffset).withOffsetSameInstant(CurrentSession.getOS()).toLocalTime();
+
+        if (modStartDateP.getValue() == null){
+            errorM += "- A start date must be selected.\n";
+            modStartDateP.setStyle("-fx-border-color: red");
+            err = true;
+        }
+
+        if (modEndDateP.getValue() == null){
+            errorM += "- An end time must be selected.\n";
+            modEndDateP.setStyle("-fx-border-color: red");
+            err = true;
+        }
+
+        if (modStartTime.getSelectionModel().getSelectedItem() == null){
+            errorM += "- A start time must be selected.\n";
+            modStartTime.setStyle("-fx-border-color: red");
+            err = true;
+        } else {
+            if(modStartTime.getValue().isBefore(startBus) || modStartTime.getValue().isAfter(endBus)){
+                timeErrorM += "- Start time must be between 8am EST & 10pm EST.\n";
+                modStartTime.setStyle("-fx-border-color: red");
+                schErr = true;
+            }
+        }
+
+        if (modEndTime.getSelectionModel().getSelectedItem() == null){
+            errorM += "- An end time must be selected.\n";
+            modEndTime.setStyle("-fx-border-color: red");
+            err = true;
+        } else {
+            if(modEndTime.getValue().isBefore(startBus) || modEndTime.getValue().isAfter(endBus)){
+                timeErrorM += "- End time must be between 8am EST & 10pm EST.\n";
+                modEndTime.setStyle("-fx-border-color: red");
+                schErr = true;
+            }
+        }
+
+        //Times Getting local date & time together
+        LocalDateTime start = null;
+        LocalDateTime end = null;
+        if (modStartDateP.getValue() != null && modStartTime.getValue() != null){
+            LocalDate startDate = modStartDateP.getValue();
+            LocalTime startTime = modStartTime.getValue();
+            start = LocalDateTime.of(startDate, startTime);
+        }
+
+        if (modEndDateP.getValue() != null && modEndDateP.getValue() != null){
+            LocalDate endDate = modEndDateP.getValue();
+            LocalTime endTime = modEndTime.getValue();
+            end = LocalDateTime.of(endDate, endTime);
+        }
+
+        if (start != null && end != null){
+            if (start.isAfter(end)){
+                timeErrorM += "- Start date & time must be before end date & time.\n";
+                modStartDateP.setStyle("-fx-border-color: red");
+                modStartTime.setStyle("-fx-border-color: red");
+                modEndDateP.setStyle("-fx-border-color: red");
+                modEndTime.setStyle("-fx-border-color: red");
+                schErr = true;
+            } else {
+                ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
+                for (Appointment appointment: appointments){
+                    if (appointment.getCustomer() == modCustDropD.getValue().getId() && appointment.getId() != Integer.parseInt(modIdField.getText())){
+                        if ((start.isBefore(appointment.getEnd()) && start.isAfter(appointment.getStart())) || (end.isAfter(appointment.getStart()) && end.isBefore(appointment.getEnd())) || (appointment.getEnd().isAfter(start) && appointment.getEnd().isBefore(end)) || (appointment.getStart().isAfter(start) && appointment.getStart().isBefore(end))) {
+                            timeErrorM += "-Customer number: " + String.valueOf(appointment.getCustomer()) + " has a conflict from " + appointment.getStartFormat() + " to " + appointment.getEndFormat() + ".\n";
+                            modStartDateP.setStyle("-fx-border-color: red");
+                            modStartTime.setStyle("-fx-border-color: red");
+                            modEndDateP.setStyle("-fx-border-color: red");
+                            modEndTime.setStyle("-fx-border-color: red");
+                            schErr = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!err && !schErr) {
+            return noErrorM;
+        } else if ( err && schErr) {
+            return errorM + "\n\n" + timeErrorM;
+        } else if (!err && schErr) {
+            return timeErrorM;
+        } else {
+            return errorM;
+        }
+    }
+
 }
