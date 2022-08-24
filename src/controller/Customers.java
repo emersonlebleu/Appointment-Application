@@ -26,40 +26,75 @@ import java.util.stream.Collectors;
 
 /** Customers window controller. */
 public class Customers implements Initializable {
+    /** Stack for customers panes */
     public StackPane custStack;
+    /** Container for modify form */
     public AnchorPane modPane;
+    /** Id field for modify pane. */
     public TextField modIdField;
+    /** Name field for modify pane. */
     public TextField modNameField;
+    /** Address field for modify pane. */
     public TextField modAddressField;
+    /** Postal field for modify pane. */
     public TextField modPostalField;
+    /** Phone field for modify pane. */
     public TextField modPhoneField;
+    /** Country field for modify pane. */
     public ComboBox<Country> modCountryDropD;
+    /** Division field for modify pane. */
     public ComboBox<Division> modFirstLevDropD;
+    /** Save button for mod pane. */
     public Button saveMod;
+    /** Cancel button for mod pane. */
     public Button cancelMod;
+    /** Container for add form */
     public AnchorPane addPane;
+    /** Id field for add pane. */
     public TextField idField;
+    /** Name field for add pane. */
     public TextField nameField;
+    /** Address field for add pane. */
     public TextField addressField;
+    /** Postal code field for add pane. */
     public TextField postalField;
+    /** Phone field for add pane. */
     public TextField phoneField;
+    /** Country field for add pane. */
     public ComboBox<Country> countryDropD;
+    /** Division field for add pane. */
     public ComboBox<Division> firstLevDropD;
+    /** Save button for add pane. */
     public Button saveAdd;
+    /** Cancel button for add pane. */
     public Button cancelAdd;
+    /** Container home pane. */
     public AnchorPane homePane;
+    /** Table view for customers. */
     public TableView custTable;
+    /** Column id for customers tbl. */
     public TableColumn idCol;
+    /** Column name for customers tbl. */
     public TableColumn nameCol;
+    /** Column address for customers tbl. */
     public TableColumn addressCol;
+    /** Column postal code for customers tbl. */
     public TableColumn postalCol;
+    /** Column phone for customers tbl. */
     public TableColumn phoneCol;
+    /** Column division for customers tbl. */
     public TableColumn firstLevCol;
+    /** Add customer button. */
     public Button addCustBtn;
+    /** Modify customer button. */
     public Button modCustBtn;
+    /** Delete customer button. */
     public Button delCustBtn;
+    /** Customer object for the current selected customer to be added to. */
     private model.Customer selectedCustomer;
+    /** Used to store the initial state of style for an element. Used for the button animations. */
     private static String startStyle;
+    /** Integer to represent the current selected country ID for drop downs. */
     private static Integer selCountryId = null;
     /** The initialize function for this controller. */
     @Override
