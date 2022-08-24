@@ -2,7 +2,6 @@ package utilities;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Contact;
 import model.User;
 
 import java.sql.PreparedStatement;
@@ -71,7 +70,8 @@ public abstract class UserDAO {
         }
         return user;
     }
-
+    /** Attempts to gather all users and put into a list of users.
+     * @return a list of users */
     public static ObservableList<User> getAllUsers() throws SQLException{
         ObservableList<model.User> users = FXCollections.observableArrayList();
         String sql = "SELECT User_ID, User_Name, Password FROM users";
