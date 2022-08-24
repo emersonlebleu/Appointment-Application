@@ -11,12 +11,12 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
 /** CRUD for appointments interaction */
 public abstract class AppointmentDAO {
-
+    /** Adds a new appointment into the database.
+     * @param appointment an appointment object. */
     public static void addAppointment(model.Appointment appointment) throws SQLException{
         String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_date, Created_By, Last_Update, Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = JDBC.conn.prepareStatement(sql);
@@ -37,7 +37,8 @@ public abstract class AppointmentDAO {
 
         ps.executeUpdate();
     }
-
+    /** Gets an appointment from the database and puts into an appointment object.
+     * @param id an appointment ID to select based on. */
     public static model.Appointment getAppointment(Integer id) throws SQLException{
         String sql = "SELECT Appointment_ID, Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID FROM appointments WHERE Appointment_ID = ?";
 
@@ -78,7 +79,8 @@ public abstract class AppointmentDAO {
         ps.executeUpdate();
     }
 
-    /** Delete a given appointment by id. */
+    /** Delete a given appointment by id.
+     * @param id an appointment ID to select based on.*/
     public static void deleteAppointment(Integer id) throws SQLException{
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
 
