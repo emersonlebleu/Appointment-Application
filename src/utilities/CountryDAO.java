@@ -8,7 +8,7 @@ import model.Division;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/** CRUD for country interaction */
 public abstract class CountryDAO {
     /** Get all countries in database and output to a list object.
      * @return a list of all countries */
