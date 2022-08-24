@@ -2,15 +2,13 @@ package utilities;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import model.Appointment;
 import model.Report;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
+/** CRUD for reports interaction. */
 public abstract class ReportDAO {
     /** Get num of appointment by each month and type input each record into a list object.
      * @return a list of report records */
