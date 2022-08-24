@@ -16,7 +16,8 @@ public abstract class CurrentSession {
         ZoneId zone = ZoneId.systemDefault();
         return zone;
     }
-
+    /** Gets the current session zone offset.
+     * @return a zone offset the current local one. */
     public static ZoneOffset getOS(){
         ZoneOffset OS = ZoneOffset.from(ZonedDateTime.now());
 
