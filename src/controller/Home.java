@@ -20,19 +20,33 @@ import java.util.ResourceBundle;
 
 /** Main window controller. */
 public class Home implements Initializable {
+    /** The appointment page button. */
     public Button apptButton;
+    /** Label for the current username. */
     public Label userNameLabel;
+    /** The customer page button. */
     public Button custButton;
+    /** The report page button. */
     public Button reportButton;
+    /** The container for customer content. */
     public AnchorPane customerPane;
+    /** The container for reports content. */
     public AnchorPane reportsPane;
+    /** The container for appointments content. */
     public AnchorPane appointmentsPane;
+    /** Overarching stack pane for three main view content containment. */
     public StackPane stackPane;
+    /** Container for main navigation buttons. */
     public AnchorPane nav;
+    /** Main container. */
     public AnchorPane homeCanvas;
+    /** Header section displays current page and title. */
     public AnchorPane header;
+    /** Title for app. */
     public Label appTitle;
+    /** Lable for current page selection. */
     public Label pageLabel;
+    /** Used to store the initial state of style for an element. Used for the button animations. */
     private static String startStyle;
 
     /** Initializer called when page is loaded. Changes username label to username from login.
