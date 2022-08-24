@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+/** Customers window controller. */
 public class Customers implements Initializable {
     public StackPane custStack;
     public AnchorPane modPane;
