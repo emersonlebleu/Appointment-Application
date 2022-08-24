@@ -20,7 +20,6 @@ import utilities.ReportDAO;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class Reports implements Initializable {
@@ -39,10 +38,13 @@ public class Reports implements Initializable {
     public TableColumn tbtmMonthCol;
     public TableColumn tbtmTypeCol;
     public TableColumn tbtmApptCol;
+    /** A list to hold the total by month and type data. */
     private ObservableList<Report> tbtmData = FXCollections.observableArrayList();
+    /** A list to hold the total by type data. */
     private ObservableList<Report> tbtData = FXCollections.observableArrayList();
+    /** A list to hold the total by month data. */
     private ObservableList<Report> tbmData = FXCollections.observableArrayList();
-
+    /** The initialize function for this Reports controller. Calls the functions to populate the tables and generate the reports. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         genTableData();
@@ -58,26 +60,17 @@ public class Reports implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
+    /** Creates the table data for the three tables. */
     private void genTableData(){
         try {
             tbtmData = ReportDAO.getNumApptByTypeMo();
             tbtData = ReportDAO.getNumApptByType();
             tbmData = ReportDAO.getNumApptByMo();
         } catch (Exception e) {
-
+            throw new RuntimeException(e);
         }
     }
-    public TableView getTotalBType(){
-        return totalBType;
-    }
-    public TableView getTotalBMonth(){
-        return totalBMonth;
-    }
-    public TableView getTotalBTyMo(){
-        return totalBTyMo;
-    }
-
+    /** Populates the tables with the appropriate data. */
     private void setTables(){
         tbtTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         tbtApptCol.setCellValueFactory(new PropertyValueFactory<>("numberAppt"));
@@ -92,42 +85,53 @@ public class Reports implements Initializable {
         tbtmTypeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         totalBTyMo.setItems(tbtmData);
     }
-
+    /** Creates a text based report for viewing appointment scheduled for each contact. */
     private void setContactReport() throws SQLException {
-        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        ObservableList<Appointment> appointments;
         appointments = AppointmentDAO.getAllAppointments();
         Contact contact = null;
         String report = "";
-        
-        for (Appointment appointment: appointments){
-            if (contact == null){
-                contact = ContactDAO.getContact(appointment.getContact());
-                report += contact.getName() + "\n";
-                report += String.valueOf(appointment.getId()) + " | " + appointment.getTitle() + " | " + appointment.getType() + " | " + appointment.getDescription() + " | " + appointment.getStartFormat() + " | " + appointment.getEndFormat() + " | " + String.valueOf(appointment.getCustomer());
-            } else if (contact.getId() == appointment.getContact()) {
-                report += "\n";
-                report += String.valueOf(appointment.getId()) + " | " + appointment.getTitle() + " | " + appointment.getType() + " | " + appointment.getDescription() + " | " + appointment.getStartFormat() + " | " + appointment.getEndFormat() + " | " + String.valueOf(appointment.getCustomer());
-            } else if (contact.getId() != appointment.getContact()) {
-                contact = ContactDAO.getContact(appointment.getContact());
-                report += "\n\n";
-                report += contact.getName() + "\n";
-                report += String.valueOf(appointment.getId()) + " | " + appointment.getTitle() + " | " + appointment.getType() + " | " + appointment.getDescription() + " | " + appointment.getStartFormat() + " | " + appointment.getEndFormat() + " | " + String.valueOf(appointment.getCustomer());
+
+        if (appointments != null){
+            for (Appointment appointment: appointments){
+                if (contact == null){
+                    contact = ContactDAO.getContact(appointment.getContact());
+                    report += contact.getName() + "\n";
+                    report += appointment.getId() + " | " + appointment.getTitle() + " | " + appointment.getType() + " | " + appointment.getDescription() + " | " + appointment.getStartFormat() + " | " + appointment.getEndFormat() + " | " + String.valueOf(appointment.getCustomer());
+                } else if (contact.getId() == appointment.getContact()) {
+                    report += "\n";
+                    report += appointment.getId() + " | " + appointment.getTitle() + " | " + appointment.getType() + " | " + appointment.getDescription() + " | " + appointment.getStartFormat() + " | " + appointment.getEndFormat() + " | " + String.valueOf(appointment.getCustomer());
+                } else if (contact.getId() != appointment.getContact()) {
+                    contact = ContactDAO.getContact(appointment.getContact());
+                    report += "\n\n";
+                    report += contact.getName() + "\n";
+                    report += appointment.getId() + " | " + appointment.getTitle() + " | " + appointment.getType() + " | " + appointment.getDescription() + " | " + appointment.getStartFormat() + " | " + appointment.getEndFormat() + " | " + String.valueOf(appointment.getCustomer());
+                }
             }
+            contactSchedulesRep.setText(report);
+        } else {
+            contactSchedulesRep.setText("No appointments found.");
         }
-        contactSchedulesRep.setText(report);
     }
+    /** Creates a text based report for viewing appointments for the sessions current logged-in user. */
     private void setUserReport() throws SQLException{
-        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+        ObservableList<Appointment> appointments;
         appointments = AppointmentDAO.getAllAppointments();
         User user = Login.getUser();
         String report = "Appointments for username: " + user.getName() + "\n";
+        boolean info = false;
 
-        for (Appointment appointment: appointments){
-            if (user.getId() == appointment.getUser()){
-                report += "\n";
-                report += String.valueOf(appointment.getId()) + " | " + appointment.getTitle() + " | " + appointment.getType() + " | " + appointment.getStartFormat() + " | " + appointment.getEndFormat() + " | " + CustomerDAO.getCustomer(appointment.getCustomer()) + " | " + ContactDAO.getContact(appointment.getContact());
+        if (appointments != null){
+            for (Appointment appointment: appointments){
+                if (user.getId() == appointment.getUser()){
+                    report += "\n";
+                    report += appointment.getId() + " | " + appointment.getTitle() + " | " + appointment.getType() + " | " + appointment.getStartFormat() + " | " + appointment.getEndFormat() + " | " + CustomerDAO.getCustomer(appointment.getCustomer()) + " | " + ContactDAO.getContact(appointment.getContact());
+                    info = true;
+                }
             }
+            userScheduleRep.setText(report);
+        } else {
+            userScheduleRep.setText("No appointments found for: " + user.getName());
         }
-        userScheduleRep.setText(report);
     }
 }
