@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /** CRUD for contact interaction */
-public class ContactDAO {
+public abstract class ContactDAO {
     /** Adds a new contact to the DB.
      * @param contact a contact to be added to the DB. */
     public static void addContact(model.Contact contact) throws SQLException {

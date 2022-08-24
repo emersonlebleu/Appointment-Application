@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DivisionDAO {
+public abstract class DivisionDAO {
     /** Get all divisions in database and output to a list object.
      * @return a list of all divisions */
     public static ObservableList<Division> getAllDivisions() throws SQLException {

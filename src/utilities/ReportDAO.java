@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-public class ReportDAO {
+public abstract class ReportDAO {
     /** Get num of appointment by each month and type input each record into a list object.
      * @return a list of report records */
     public static ObservableList<Report> getNumApptByTypeMo() throws SQLException {

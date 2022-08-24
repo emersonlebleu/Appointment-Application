@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CountryDAO {
+public abstract class CountryDAO {
     /** Get all countries in database and output to a list object.
      * @return a list of all countries */
     public static ObservableList<Country> getAllCountries() throws SQLException {
