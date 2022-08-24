@@ -57,19 +57,19 @@ public class Customers implements Initializable {
     public Button addCustBtn;
     public Button modCustBtn;
     public Button delCustBtn;
-
     private model.Customer selectedCustomer;
-
     private static String startStyle;
-
     private static Integer selCountryId = null;
-
+    /** The initialize function for this controller. */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setCustTable();
         refreshCountries();
     }
-
+    /** Runs the validateMod function and if function doesn't return an error message the information from the
+     * form is saved into a customer object and then passed to the customerDAO.updateCustomer() function
+     * to be stored in the database. If the validateMod function returns an error message an alert is generated
+     * with the error(s) from the validation.*/
     public void onSaveMod(ActionEvent actionEvent) {
         if (validateMod() == null){
             Integer id = Integer.valueOf(modIdField.getText());
@@ -108,11 +108,14 @@ public class Customers implements Initializable {
         }
 
     }
-
+    /** If cancel modification then home page moves to front. */
     public void onCancelMod(ActionEvent actionEvent) {
         homePane.toFront();
     }
-
+    /** Runs the validateAdd function and if function doesn't return an error message the information from the
+     * form is saved into a customer object and then passed to the customerDAO.addCustomer() function
+     * to be stored in the database. If the validateAdd function returns an error message an alert is generated
+     * with the error(s) from the validation.*/
     public void onSaveAdd(ActionEvent actionEvent) {
         if (validateAdd() == null){
             String name = nameField.getText();
@@ -149,16 +152,17 @@ public class Customers implements Initializable {
             alert.showAndWait();
         }
     }
-
+    /** If cancel add then form fields are reset and home page moves to front. */
     public void onCancelAdd(ActionEvent actionEvent) {
         clearFormFields();
         homePane.toFront();
     }
-
+    /** Moves the add pane to front. */
     public void add_cust(ActionEvent actionEvent) {
         addPane.toFront();
     }
-
+    /** Moves the mod pane to front and populates the form fields if no customer selected generates an alert
+     * error message. Utilizes the selected customer from the table to populate the form fields appropriately. */
     public void mod_cust(ActionEvent actionEvent) {
         selectedCustomer = (Customer) custTable.getSelectionModel().getSelectedItem();
 
@@ -211,7 +215,9 @@ public class Customers implements Initializable {
             modPane.toFront();
         }
     }
-
+    /** If a customer is selected that customer id is passed to the delete function within the customerDAO.
+     * Additionally, an alert is generated showing the user what customer was deleted if successful.
+     * If a customer is not selected an error message popup is generated. */
     public void delete_cust(ActionEvent actionEvent) {
         selectedCustomer = (Customer) custTable.getSelectionModel().getSelectedItem();
 
@@ -262,39 +268,54 @@ public class Customers implements Initializable {
             setCustTable();
             }
     }
-
+    /** Functionality for styling button on mouse enter/exit. */
     public void mouseOvAdd(MouseEvent mouseEvent) {
         startStyle = addCustBtn.getStyle();
         addCustBtn.setStyle("-fx-background-color: #2F334B;");
     }
-
+    /** Functionality for styling button on mouse enter/exit. */
     public void mouseOutAdd(MouseEvent mouseEvent) {
         addCustBtn.setStyle(startStyle);
     }
-
+    /** Functionality for styling button on mouse enter/exit. */
     public void mouseOvMod(MouseEvent mouseEvent) {
         startStyle = modCustBtn.getStyle();
         modCustBtn.setStyle("-fx-background-color: #2F334B;");
     }
-
+    /** Functionality for styling button on mouse enter/exit. */
     public void mouseOutMod(MouseEvent mouseEvent) {
         modCustBtn.setStyle(startStyle);
     }
-
+    /** Functionality for styling button on mouse enter/exit. */
     public void mouseOvDel(MouseEvent mouseEvent) {
         startStyle = delCustBtn.getStyle();
         delCustBtn.setStyle("-fx-background-color: #2F334B;");
     }
-
+    /** Functionality for styling button on mouse enter/exit. */
     public void mouseOutDel(MouseEvent mouseEvent) {
         delCustBtn.setStyle(startStyle);
     }
+    /** Detects dropdown change on country for add form and repopulates the divisions.*/
+    public void countryDropDChangeAdd(ActionEvent actionEvent) {
+        if (countryDropD.getSelectionModel().getSelectedItem() != null){
+            selCountryId = countryDropD.getSelectionModel().getSelectedItem().getId();
+        } else {
+            selCountryId = null;
+        }
+        refreshDivisions();
+    }
+    /** Detects dropdown change on country for mod form and repopulates the divisions.*/
+    public void countryDropDChangeMod(ActionEvent actionEvent) {
+        if (modCountryDropD.getSelectionModel().getSelectedItem() != null){
+            selCountryId = modCountryDropD.getSelectionModel().getSelectedItem().getId();
+        } else {
+            selCountryId = null;
+        }
+        refreshDivisions();
+    }
 
-    //------------------------------------------------------Functions Used-----------------------------------
-    private ObservableList<Division> divisions;
-    private ObservableList<Country> countries;
-
-    /** Function refreshes date in the customers table */
+    //-------------------------------------------------------------------FUNCTION DECLARATIONS--------------------------------------------------
+    /** Function refreshes data in the customers table */
     private void setCustTable(){
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         try {
@@ -312,9 +333,9 @@ public class Customers implements Initializable {
 
         custTable.setItems(customers);
     }
-
-    /** Set country drop-downs on page */
+    /** Set country drop-downs on add and mod forms. */
     private void refreshCountries(){
+        ObservableList<Country> countries;
         try {
             countries = CountryDAO.getAllCountries();
         } catch (SQLException e) {
@@ -329,13 +350,13 @@ public class Customers implements Initializable {
         modCountryDropD.setItems(countries);
         modCountryDropD.setVisibleRowCount(5);
     }
-    /** LAMBDA FUNCTION PRESENT*** This overall function Set divisions drop-downs on page. The lambda function here allows this function to assign all divisions for which the
+    /** <b>LAMBDA FUNCTION PRESENT***</b> This overall function Set divisions drop-downs on page. The lambda function here allows this function to assign all divisions for which the
      * country matches the selected country into an observable array list of the appropriate divisions for the selected countries. It has reduced the length of the
      * block of code in this case moderately. */
     private void refreshDivisions(){
         ObservableList<Division> matches;
         try {
-            divisions = DivisionDAO.getAllDivisions();
+            ObservableList<Division> divisions = DivisionDAO.getAllDivisions();
 
             if (selCountryId == null) {
                 firstLevDropD.setItems(null);
@@ -363,7 +384,7 @@ public class Customers implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
+    /** Clears the fields of both forms. */
     public void clearFormFields(){
         nameField.clear();
         addressField.clear();
@@ -379,25 +400,9 @@ public class Customers implements Initializable {
         modCountryDropD.getSelectionModel().clearSelection();
         modFirstLevDropD.setItems(null);
     }
-
-    public void countryDropDChangeAdd(ActionEvent actionEvent) {
-        if (countryDropD.getSelectionModel().getSelectedItem() != null){
-            selCountryId = countryDropD.getSelectionModel().getSelectedItem().getId();
-        } else {
-            selCountryId = null;
-        }
-        refreshDivisions();
-    }
-
-    public void countryDropDChangeMod(ActionEvent actionEvent) {
-        if (modCountryDropD.getSelectionModel().getSelectedItem() != null){
-            selCountryId = modCountryDropD.getSelectionModel().getSelectedItem().getId();
-        } else {
-            selCountryId = null;
-        }
-        refreshDivisions();
-    }
-
+    /** Assures that information within the add form is valid. Provides error message for each error found or
+     * null if none are found.
+     * @return a string the error message. */
     private String validateAdd(){
         nameField.setStyle(null);
         addressField.setStyle(null);
@@ -446,7 +451,9 @@ public class Customers implements Initializable {
             return errorM;
         }
     }
-
+    /** Assures that information within the mod form is valid. Provides error message for each error found or
+     * null if none are found.
+     * @return a string the error message. */
     private String validateMod(){
         modNameField.setStyle(null);
         modAddressField.setStyle(null);

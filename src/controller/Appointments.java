@@ -107,14 +107,17 @@ public class Appointments implements Initializable {
         addPane.toFront();
     }
 
-    /** LAMBDA USED HERE*** This lambda passes the required parameters to the functional "check"
+    /** <b>LAMBDA FUNCTION PRESENT***</b> This lambda passes the required parameters to the functional "check"
      * interface method. This creates a "popup" alert of the type passed in with the title and message.
      * This allows for the creation of a popup within the controller logic and
-     * shortens the within controller logic down considerably. As a note I would not have typically put this inside of one particular interface method but defined
+     * shortens the within controller logic down considerably.
+     * <br>As a note I would not have typically put this inside of one particular interface method but defined
      * outside and then used in multiple different instances however to meet requirements the lambda needed to be inside a
      * particular method so that I could comment and point it out. If used multiple times however this would have made
      * the creating of the "Check" worth it in terms of code brevity as each subsequent alert could have been just the one line
-     * "check.popUp(**insert arguments**"" etc. Additionally this mod appointment function brings the mod appointment pane to front
+     * "check.popUp(**insert arguments**"" etc.
+     * <br><br>
+     * Additionally this mod appointment function brings the mod appointment pane to front
      * and pre-fills the fields with data from the selected appointment from the appointments table. */
     public void mod_appt(ActionEvent actionEvent) {
         //Lambda Use
