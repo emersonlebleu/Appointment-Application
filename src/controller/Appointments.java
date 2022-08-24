@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/** Appointments controller. Contains all methods for the appointments interface. */
 public class Appointments implements Initializable {
     public TableView apptTable;
     public TableColumn idCol;
@@ -77,14 +78,315 @@ public class Appointments implements Initializable {
     public RadioButton allRadio;
     public ToggleGroup viewToggle;
 
+    /** A variable to store the appointment selected in appointments table. */
     private model.Appointment selectedAppointment;
+    /** Used to store the initial state of style for an element. Used for the button animations. */
     private static String startStyle;
+    /** Put the times into an object to be used */
+    private final ObservableList<LocalTime> times = createTimes();
+    /** To be filled, list of customers for drop-downs. */
+    private ObservableList<Customer> customers;
+    /** To be filled, list of users for drop-downs. */
+    private ObservableList<User> users;
+    /** To be filled, list of contacts for drop-downs. */
+    private ObservableList<Contact> contacts;
+    /** The initialize function for this controller. */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        allRadio.setToggleGroup(viewToggle);
+        monthRadio.setToggleGroup(viewToggle);
+        weekRadio.setToggleGroup(viewToggle);
+        allRadio.setSelected(true);
 
-    public TableView getApptTable(){
-        return apptTable;
+        refreshDropdowns();
+        setApptTable();
+        homePane.toFront();
+    }
+    /** On action of the add appointment button the add Pane is brought to the front of the view. */
+    public void add_appt(ActionEvent actionEvent) {
+        addPane.toFront();
     }
 
-    /** Function refreshes date in the appointments table */
+    /** LAMBDA USED HERE*** This lambda passes the required parameters to the functional "check"
+     * interface method. This creates a "popup" alert of the type passed in with the title and message.
+     * This allows for the creation of a popup within the controller logic and
+     * shortens the within controller logic down considerably. As a note I would not have typically put this inside of one particular interface method but defined
+     * outside and then used in multiple different instances however to meet requirements the lambda needed to be inside a
+     * particular method so that I could comment and point it out. If used multiple times however this would have made
+     * the creating of the "Check" worth it in terms of code brevity as each subsequent alert could have been just the one line
+     * "check.popUp(**insert arguments**"" etc. Additionally this mod appointment function brings the mod appointment pane to front
+     * and pre-fills the fields with data from the selected appointment from the appointments table. */
+    public void mod_appt(ActionEvent actionEvent) {
+        //Lambda Use
+        Check check = (Check.Type type, String title, String message) -> {
+            if (type == Check.Type.ERROR){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle(title);
+                alert.setHeaderText(null);
+                alert.initStyle(StageStyle.UTILITY);
+                alert.setContentText(message);
+
+                alert.showAndWait();
+            } else if (type == Check.Type.CONFIRMATION) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle(title);
+                alert.setHeaderText(null);
+                alert.setContentText(message);
+                ButtonType buttonTypeYes = new ButtonType("Yes");
+                ButtonType buttonTypeNo = new ButtonType("No");
+
+                alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+                Optional<ButtonType> result = alert.showAndWait();
+            }
+        };
+        selectedAppointment = (Appointment) apptTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment == null) {
+            //USE OF CHECK******
+            check.popUp(Check.Type.ERROR, "No Selection", "Please make a selection");
+        } else {
+            refreshDropdowns();
+            modIdField.setText(String.valueOf(selectedAppointment.getId()));
+            modTitleField.setText(selectedAppointment.getTitle());
+            modDescriptionField.setText(selectedAppointment.getDescription());
+            modLocationField.setText(selectedAppointment.getLocation());
+            modTypeField.setText(selectedAppointment.getType());
+
+
+            //Times Getting local date & time together
+            LocalDate startDate = selectedAppointment.getStart().toLocalDate();
+            LocalTime startTime = selectedAppointment.getStart().toLocalTime();
+            LocalDate endDate = selectedAppointment.getEnd().toLocalDate();
+            LocalTime endTime = selectedAppointment.getEnd().toLocalTime();
+
+            modStartDateP.setValue(startDate);
+            modStartTime.getSelectionModel().select(startTime);
+            modEndDateP.setValue(endDate);
+            modEndTime.getSelectionModel().select(endTime);
+
+            Customer currCustomer = null;
+            for (Customer customer: customers) {
+                if (customer.getId() == selectedAppointment.getCustomer()){
+                    currCustomer = customer;
+                }
+            }
+
+            User currUser = null;
+            for (User user: users) {
+                if (user.getId() == selectedAppointment.getUser()){
+                    currUser = user;
+                }
+            }
+
+            Contact currContact = null;
+            for (Contact contact: contacts) {
+                if (contact.getId() == selectedAppointment.getContact()){
+                    currContact = contact;
+                }
+            }
+
+            modCustDropD.getSelectionModel().select(currCustomer);
+            modUserDropD.getSelectionModel().select(currUser);
+            modContactDropD.getSelectionModel().select(currContact);
+
+            modPane.toFront();
+        }
+
+
+    }
+    /** Deletes from the database the appointment that corresponds to the selected appointment from the table. Confirms this action and
+     * if there is no selection gives an error message indicating as such. Provides a popup of deleted appointment information on success. */
+    public void delete_appt(ActionEvent actionEvent) {
+        selectedAppointment = (model.Appointment) apptTable.getSelectionModel().getSelectedItem();
+
+        if (selectedAppointment == null) {
+            //----------------No Selection Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("No Selection");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText("Please make a selection.");
+
+            alert.showAndWait();
+        } else {
+            //--------------Remove Confirmation Box----------------------//
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Cancel Confirmation");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you'd like to cancel this appointment?");
+            ButtonType buttonTypeYes = new ButtonType("Yes");
+            ButtonType buttonTypeNo = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeYes) {
+                try {
+                    AppointmentDAO.deleteAppointment(selectedAppointment.getId());
+                    setApptTable();
+                } catch (Exception e) {
+                    //FIX**
+                }
+            } else {
+                //Do nothing
+            }
+            //----------------Canceled Appointment--------------------//
+            Alert notification = new Alert(Alert.AlertType.INFORMATION);
+            notification.setTitle("Canceled Appointment");
+            notification.setHeaderText(null);
+            notification.initStyle(StageStyle.UTILITY);
+            notification.setContentText("Canceled Appointment Number: " + selectedAppointment.getId() + "\n" + "Type: " + selectedAppointment.getType());
+
+            notification.showAndWait();
+        }
+    }
+    /** Functionality for styling button on mouse enter/exit. */
+    public void mouseOvAdd(MouseEvent mouseEvent) {
+        startStyle = addApptBtn.getStyle();
+        addApptBtn.setStyle("-fx-background-color: #2F334B;");
+    }
+    /** Functionality for styling button on mouse enter/exit. */
+    public void mouseOutAdd(MouseEvent mouseEvent) {
+        addApptBtn.setStyle(startStyle);
+    }
+    /** Functionality for styling button on mouse enter/exit. */
+    public void mouseOvMod(MouseEvent mouseEvent) {
+        startStyle = modApptBtn.getStyle();
+        modApptBtn.setStyle("-fx-background-color: #2F334B;");
+    }
+    /** Functionality for styling button on mouse enter/exit. */
+    public void mouseOutMod(MouseEvent mouseEvent) {
+        modApptBtn.setStyle(startStyle);
+    }
+    /** Functionality for styling button on mouse enter/exit. */
+    public void mouseOvDel(MouseEvent mouseEvent) {
+        startStyle = delApptBtn.getStyle();
+        delApptBtn.setStyle("-fx-background-color: #2F334B;");
+    }
+    /** Functionality for styling button on mouse enter/exit. */
+    public void mouseOutDel(MouseEvent mouseEvent) {
+        delApptBtn.setStyle(startStyle);
+    }
+
+    /** Resets the form fields to blank/null and moves home pane to front. */
+    public void onCancelAdd(ActionEvent actionEvent) {
+        clearAddFormFields();
+        homePane.toFront();
+    }
+    /** Calls the validation function (this is passed to an alert as long as there is something to alert about remaining)
+     * and once this passes inputs information from fields into a new appointment object
+     * and passes the object to the appointmentsDAO.addAppointment() function to be added to database. Finally, resets the appointment
+     * table, clears the form fields and moves the home pane to front. */
+    public void onSaveAdd(ActionEvent actionEvent) throws SQLException {
+        if (validateAdd() == null) {
+            String title = titleField.getText();
+            String description = descriptionField.getText();
+            String location = locationField.getText();
+            String type = typeField.getText();
+
+
+            //Times Getting local date & time together
+            LocalDate startDate = startDateP.getValue();
+            LocalTime startTime = addStartTime.getValue();
+            LocalDate endDate = endDateP.getValue();
+            LocalTime endTime = addEndTime.getValue();
+
+            LocalDateTime start = LocalDateTime.of(startDate, startTime);
+            LocalDateTime end = LocalDateTime.of(endDate, endTime);
+
+            Integer customerId = custDropD.getValue().getId();
+            Integer userId = userDropD.getValue().getId();
+            Integer contactId = contactDropD.getValue().getId();
+
+            model.Appointment newAppt = new Appointment(title, description, location, type, start, end, customerId, userId, contactId);
+            try {
+                AppointmentDAO.addAppointment(newAppt);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            setApptTable();
+            clearAddFormFields();
+            homePane.toFront();
+        } else {
+            //----------------Non valid Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Form Submit Error");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText(validateAdd());
+
+            alert.showAndWait();
+        }
+
+    }
+    /** Moves home pane to front if modification is canceled. */
+    public void onCancelMod(ActionEvent actionEvent) {
+        homePane.toFront();
+    }
+    /** Calls the validation function (this is passed to an alert as long as there is something to alert about remaining)
+     *  and once this passes, inputs information from fields into a new appointment object
+     * and passes the object to the appointmentsDAO.updateAppointment() function to be added to database. Finally, resets the appointment
+     * table and moves the home pane to front. */
+    public void onSaveMod(ActionEvent actionEvent) throws SQLException {
+        if (validateMod() == null) {
+            Integer id = Integer.parseInt(modIdField.getText());
+            String title = modTitleField.getText();
+            String description = modDescriptionField.getText();
+            String location = modLocationField.getText();
+            String type = modTypeField.getText();
+
+
+            //Times Getting local date & time together
+            LocalDate startDate = modStartDateP.getValue();
+            LocalTime startTime = modStartTime.getValue();
+            LocalDate endDate = modEndDateP.getValue();
+            LocalTime endTime = modEndTime.getValue();
+
+            LocalDateTime start = LocalDateTime.of(startDate, startTime);
+            LocalDateTime end = LocalDateTime.of(endDate, endTime);
+
+            Integer customerId = modCustDropD.getValue().getId();
+            Integer userId = modUserDropD.getValue().getId();
+            Integer contactId = modContactDropD.getValue().getId();
+
+            model.Appointment newAppt = new Appointment(id, title, description, location, type, start, end, customerId, userId, contactId);
+            try {
+                AppointmentDAO.updateAppointment(newAppt);
+                System.out.println("Updated!");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+
+            setApptTable();
+            homePane.toFront();
+        } else {
+            //----------------Non valid Error--------------------//
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Form Submit Error");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText(validateMod());
+
+            alert.showAndWait();
+        }
+
+    }
+    /** Month radio button select refreshes the appointments table with the proper filter indication in this case this month's appointments*/
+    public void onMonth(ActionEvent actionEvent) {
+        setApptTable();
+    }
+    /** Week radio button select refreshes the appointments table with the proper filter indication in this case this week (Sunday to Saturday) appointments*/
+    public void onWeek(ActionEvent actionEvent) {
+        setApptTable();
+    }
+    /** All radio button select refreshes the appointments table with the proper filter indication in this case all appointments. */
+    public void onAll(ActionEvent actionEvent) {
+        setApptTable();
+    }
+
+    //-------------------------------------------------------------------FUNCTION DECLARATIONS--------------------------------------------------
+    /** Function refreshes the appointments table. Will refresh the data in the table with all appointments, this month's appointments, or this week's
+     * appointments depending on the current state of the toggle group of radio buttons. */
     private void setApptTable(){
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         try {
@@ -160,8 +462,7 @@ public class Appointments implements Initializable {
 
         apptTable.setItems(appointments);
     }
-
-    /** Function creates the list of times */
+    /** Function creates the list of times to be used in the dropdowns for appointment mod/add. */
     private ObservableList<LocalTime> createTimes(){
         ObservableList<LocalTime> times = FXCollections.observableArrayList();
         LocalTime low = LocalTime.of(0, 0);
@@ -177,13 +478,7 @@ public class Appointments implements Initializable {
         }
         return times;
     }
-    /** Set the times to an object to be used */
-    private final ObservableList<LocalTime> times = createTimes();
-    private ObservableList<Customer> customers;
-    private ObservableList<User> users;
-    private ObservableList<Contact> contacts;
-
-    /** Sets drop-downs on page */
+    /** Sets drop-downs on page. Fills customers, users, and contacts & sets the drop-downs to these lists. */
     private void refreshDropdowns(){
         try {
             contacts = ContactDAO.getAllContacts();
@@ -235,8 +530,8 @@ public class Appointments implements Initializable {
         modUserDropD.setItems(users);
         modUserDropD.setVisibleRowCount(7);
     }
-
-    public void clearAddFormFields(){
+    /** Used to clear the form fields of the "add" form. */
+    private void clearAddFormFields(){
         titleField.clear();
         descriptionField.clear();
         locationField.clear();
@@ -249,262 +544,9 @@ public class Appointments implements Initializable {
         userDropD.getSelectionModel().clearSelection();
         contactDropD.getSelectionModel().clearSelection();
     }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        allRadio.setToggleGroup(viewToggle);
-        monthRadio.setToggleGroup(viewToggle);
-        weekRadio.setToggleGroup(viewToggle);
-        allRadio.setSelected(true);
-
-        refreshDropdowns();
-        setApptTable();
-        homePane.toFront();
-    }
-
-    public void add_appt(ActionEvent actionEvent) {
-        addPane.toFront();
-    }
-
-    public void mod_appt(ActionEvent actionEvent) {
-        selectedAppointment = (Appointment) apptTable.getSelectionModel().getSelectedItem();
-
-        if (selectedAppointment == null) {
-            //USE OF CHECK******
-            check.popUp(Check.Type.ERROR, "No Selection", "Please make a selection");
-        } else {
-            refreshDropdowns();
-            modIdField.setText(String.valueOf(selectedAppointment.getId()));
-            modTitleField.setText(selectedAppointment.getTitle());
-            modDescriptionField.setText(selectedAppointment.getDescription());
-            modLocationField.setText(selectedAppointment.getLocation());
-            modTypeField.setText(selectedAppointment.getType());
-
-
-            //Times Getting local date & time together
-            LocalDate startDate = selectedAppointment.getStart().toLocalDate();
-            LocalTime startTime = selectedAppointment.getStart().toLocalTime();
-            LocalDate endDate = selectedAppointment.getEnd().toLocalDate();
-            LocalTime endTime = selectedAppointment.getEnd().toLocalTime();
-
-            modStartDateP.setValue(startDate);
-            modStartTime.getSelectionModel().select(startTime);
-            modEndDateP.setValue(endDate);
-            modEndTime.getSelectionModel().select(endTime);
-
-            Customer currCustomer = null;
-            for (Customer customer: customers) {
-                if (customer.getId() == selectedAppointment.getCustomer()){
-                    currCustomer = customer;
-                }
-            }
-
-            User currUser = null;
-            for (User user: users) {
-                if (user.getId() == selectedAppointment.getUser()){
-                    currUser = user;
-                }
-            }
-
-            Contact currContact = null;
-            for (Contact contact: contacts) {
-                if (contact.getId() == selectedAppointment.getContact()){
-                    currContact = contact;
-                }
-            }
-
-            modCustDropD.getSelectionModel().select(currCustomer);
-            modUserDropD.getSelectionModel().select(currUser);
-            modContactDropD.getSelectionModel().select(currContact);
-
-            modPane.toFront();
-        }
-
-
-    }
-
-    public void delete_appt(ActionEvent actionEvent) {
-        selectedAppointment = (model.Appointment) apptTable.getSelectionModel().getSelectedItem();
-
-        if (selectedAppointment == null) {
-            //----------------No Selection Error--------------------//
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("No Selection");
-            alert.setHeaderText(null);
-            alert.initStyle(StageStyle.UTILITY);
-            alert.setContentText("Please make a selection.");
-
-            alert.showAndWait();
-        } else {
-            //--------------Remove Confirmation Box----------------------//
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Cancel Confirmation");
-            alert.setHeaderText(null);
-            alert.setContentText("Are you sure you'd like to cancel this appointment?");
-            ButtonType buttonTypeYes = new ButtonType("Yes");
-            ButtonType buttonTypeNo = new ButtonType("No");
-
-            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == buttonTypeYes) {
-                try {
-                    AppointmentDAO.deleteAppointment(selectedAppointment.getId());
-                    setApptTable();
-                } catch (Exception e) {
-                    //FIX**
-                }
-            } else {
-                //Do nothing
-            }
-            //----------------Canceled Appointment--------------------//
-            Alert notification = new Alert(Alert.AlertType.INFORMATION);
-            notification.setTitle("Canceled Appointment");
-            notification.setHeaderText(null);
-            notification.initStyle(StageStyle.UTILITY);
-            notification.setContentText("Canceled Appointment Number: " + selectedAppointment.getId() + "\n" + "Type: " + selectedAppointment.getType());
-
-            notification.showAndWait();
-        }
-    }
-
-    public void mouseOvAdd(MouseEvent mouseEvent) {
-        startStyle = addApptBtn.getStyle();
-        addApptBtn.setStyle("-fx-background-color: #2F334B;");
-    }
-
-    public void mouseOutAdd(MouseEvent mouseEvent) {
-        addApptBtn.setStyle(startStyle);
-    }
-
-    public void mouseOvMod(MouseEvent mouseEvent) {
-        startStyle = modApptBtn.getStyle();
-        modApptBtn.setStyle("-fx-background-color: #2F334B;");
-    }
-
-    public void mouseOutMod(MouseEvent mouseEvent) {
-        modApptBtn.setStyle(startStyle);
-    }
-
-    public void mouseOvDel(MouseEvent mouseEvent) {
-        startStyle = delApptBtn.getStyle();
-        delApptBtn.setStyle("-fx-background-color: #2F334B;");
-    }
-
-    public void mouseOutDel(MouseEvent mouseEvent) {
-        delApptBtn.setStyle(startStyle);
-    }
-
-    public void onCancelAdd(ActionEvent actionEvent) {
-        clearAddFormFields();
-        homePane.toFront();
-    }
-
-    public void onSaveAdd(ActionEvent actionEvent) throws SQLException {
-        if (validateAdd() == null) {
-            String title = titleField.getText();
-            String description = descriptionField.getText();
-            String location = locationField.getText();
-            String type = typeField.getText();
-
-
-            //Times Getting local date & time together
-            LocalDate startDate = startDateP.getValue();
-            LocalTime startTime = addStartTime.getValue();
-            LocalDate endDate = endDateP.getValue();
-            LocalTime endTime = addEndTime.getValue();
-
-            LocalDateTime start = LocalDateTime.of(startDate, startTime);
-            LocalDateTime end = LocalDateTime.of(endDate, endTime);
-
-            Integer customerId = custDropD.getValue().getId();
-            Integer userId = userDropD.getValue().getId();
-            Integer contactId = contactDropD.getValue().getId();
-
-            model.Appointment newAppt = new Appointment(title, description, location, type, start, end, customerId, userId, contactId);
-            try {
-                AppointmentDAO.addAppointment(newAppt);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-
-            setApptTable();
-            clearAddFormFields();
-            homePane.toFront();
-        } else {
-            //----------------Non valid Error--------------------//
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Form Submit Error");
-            alert.setHeaderText(null);
-            alert.initStyle(StageStyle.UTILITY);
-            alert.setContentText(validateAdd());
-
-            alert.showAndWait();
-        }
-
-    }
-
-    public void onCancelMod(ActionEvent actionEvent) {
-        homePane.toFront();
-    }
-
-    public void onSaveMod(ActionEvent actionEvent) throws SQLException {
-        if (validateMod() == null) {
-            Integer id = Integer.parseInt(modIdField.getText());
-            String title = modTitleField.getText();
-            String description = modDescriptionField.getText();
-            String location = modLocationField.getText();
-            String type = modTypeField.getText();
-
-
-            //Times Getting local date & time together
-            LocalDate startDate = modStartDateP.getValue();
-            LocalTime startTime = modStartTime.getValue();
-            LocalDate endDate = modEndDateP.getValue();
-            LocalTime endTime = modEndTime.getValue();
-
-            LocalDateTime start = LocalDateTime.of(startDate, startTime);
-            LocalDateTime end = LocalDateTime.of(endDate, endTime);
-
-            Integer customerId = modCustDropD.getValue().getId();
-            Integer userId = modUserDropD.getValue().getId();
-            Integer contactId = modContactDropD.getValue().getId();
-
-            model.Appointment newAppt = new Appointment(id, title, description, location, type, start, end, customerId, userId, contactId);
-            try {
-                AppointmentDAO.updateAppointment(newAppt);
-                System.out.println("Updated!");
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-
-            setApptTable();
-            clearAddFormFields();
-            homePane.toFront();
-        } else {
-            //----------------Non valid Error--------------------//
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Form Submit Error");
-            alert.setHeaderText(null);
-            alert.initStyle(StageStyle.UTILITY);
-            alert.setContentText(validateMod());
-
-            alert.showAndWait();
-        }
-
-    }
-
-    public void onMonth(ActionEvent actionEvent) {
-        setApptTable();
-    }
-
-    public void onWeek(ActionEvent actionEvent) {
-        setApptTable();
-    }
-
-    public void onAll(ActionEvent actionEvent) {
-        setApptTable();
-    }
-
+    /** Insures that all data inputted into the add appointment form fields pass specified requirements. For each separate requirement that does not pass
+     * a specific error is provided and the complete error message is returned.
+     * @return a string which is the complete error message with a specific indication for each error found. */
     private String validateAdd() throws SQLException {
         titleField.setStyle(null);
         descriptionField.setStyle(null);
@@ -649,7 +691,9 @@ public class Appointments implements Initializable {
             return errorM;
         }
     }
-
+    /** Insures that all data inputted into the modify appointment form fields pass specified requirements. For each separate requirement that does not pass
+     * a specific error is provided and the complete error message is returned.
+     * @return a string which is the complete error message with a specific indication for each error found. */
     private String validateMod() throws SQLException {
         modTitleField.setStyle(null);
         modDescriptionField.setStyle(null);
@@ -797,31 +841,4 @@ public class Appointments implements Initializable {
             return errorM;
         }
     }
-    /** LAMBDA USED HERE*** This lambda passes the required parameters to the functional "check"
-     * interface method. This creates a "popup" alert of the type passed in with the title and message.
-     * This allows for the creation of a popup within the controller logic and
-     * shortens the within controller logic down considerably. You can see the difference as only
-     * the first call within the code uses the "check" rather than the written out alert
-     * functionality. */
-    Check check = (Check.Type type, String title, String message) -> {
-        if (type == Check.Type.ERROR){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.initStyle(StageStyle.UTILITY);
-            alert.setContentText(message);
-
-            alert.showAndWait();
-        } else if (type == Check.Type.CONFIRMATION) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            ButtonType buttonTypeYes = new ButtonType("Yes");
-            ButtonType buttonTypeNo = new ButtonType("No");
-
-            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-            Optional<ButtonType> result = alert.showAndWait();
-        }
-    };
 }
