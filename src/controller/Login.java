@@ -39,45 +39,12 @@ public class Login implements Initializable {
     public Label langLabel;
     public Label tzText;
     public Label langText;
-
+    /** User object for the current session user. */
     public static model.User currUser;
-
-
+    /** Gets the user object for the current session user.
+     * @return a user the current session user. */
     public static model.User getUser(){
         return currUser;
-    }
-
-    public void apptLoginCheck(){
-        ObservableList<Appointment> appointments = null;
-        try {
-            appointments = AppointmentDAO.getAllAppointments();
-        } catch (Exception e) {
-            //FIX**
-        }
-        Integer numAlerts = 0;
-        for (Appointment appointment: appointments) {
-            if (appointment.getStart().isAfter(LocalDateTime.now()) && appointment.getStart().isBefore(LocalDateTime.now().plusMinutes(15)) && appointment.getUser() == Login.getUser().getId()){
-                //----------------Alert for appointments--------------------//
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Upcoming Appointment");
-                alert.setHeaderText(null);
-                alert.initStyle(StageStyle.UTILITY);
-                alert.setContentText("Appointment ID: " + String.valueOf(appointment.getId()) + "\n" + "Start: " + appointment.getStartFormat());
-
-                alert.showAndWait();
-                numAlerts ++;
-            }
-        }
-
-        if (numAlerts == 0){
-            //----------------Alert for appointments--------------------//
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Upcoming Appointment");
-            alert.setHeaderText(null);
-            alert.initStyle(StageStyle.UTILITY);
-            alert.setContentText("User: " + Login.getUser() + " has no upcoming appointments.");
-            alert.showAndWait();
-        }
     }
 
     /** Initialize login, gets rb for french if the system language is French. Uses .properties to translate
@@ -102,7 +69,10 @@ public class Login implements Initializable {
     }
 
     /** Login button pressed, gather username and password and validate against DB.
-     * Loads the main page if successfull, displays error if not. */
+     * Loads the main page if successfull, displays error if not.
+     * <br>
+     * Also writes to the login_activity file. Additionally, runs the appointment check function for
+     * feedback on possible upcoming appointments for current user. */
     public void onLogin(ActionEvent actionEvent) throws SQLException, IOException {
         FileWriter fw = new FileWriter("login_activity.txt", true);
         PrintWriter pw = new PrintWriter(fw);
@@ -142,7 +112,6 @@ public class Login implements Initializable {
             alert.showAndWait();
         }
     }
-
     /** Change color on mouse over. */
     public void mouseOver(MouseEvent mouseEvent) {
         loginButton.setStyle("-fx-background-color: #EFA857");
@@ -150,5 +119,41 @@ public class Login implements Initializable {
     /** Change color to default on mouse out. */
     public void mouseOut(MouseEvent mouseEvent) {
         loginButton.setStyle("-fx-background-color: #ED9B40");
+    }
+
+    //-------------------------------------------------------------------FUNCTION DECLARATIONS--------------------------------------------------
+    /** Checks for appointments within 15 min (plus or minus) of current system time. If there are appointments they are
+     * displayed in an alert. If there aren't an alert indicating there are none is displayed. */
+    public void apptLoginCheck(){
+        ObservableList<Appointment> appointments = null;
+        try {
+            appointments = AppointmentDAO.getAllAppointments();
+        } catch (Exception e) {
+            //FIX**
+        }
+        Integer numAlerts = 0;
+        for (Appointment appointment: appointments) {
+            if (appointment.getStart().isAfter(LocalDateTime.now()) && appointment.getStart().isBefore(LocalDateTime.now().plusMinutes(15)) && appointment.getUser() == Login.getUser().getId()){
+                //----------------Alert for appointments--------------------//
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Upcoming Appointment");
+                alert.setHeaderText(null);
+                alert.initStyle(StageStyle.UTILITY);
+                alert.setContentText("Appointment ID: " + String.valueOf(appointment.getId()) + "\n" + "Start: " + appointment.getStartFormat());
+
+                alert.showAndWait();
+                numAlerts ++;
+            }
+        }
+
+        if (numAlerts == 0){
+            //----------------Alert for appointments--------------------//
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Upcoming Appointment");
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText("User: " + Login.getUser() + " has no upcoming appointments.");
+            alert.showAndWait();
+        }
     }
 }
