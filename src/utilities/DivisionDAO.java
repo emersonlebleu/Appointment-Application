@@ -7,7 +7,7 @@ import model.Division;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+/** CRUD for division interaction. */
 public abstract class DivisionDAO {
     /** Get all divisions in database and output to a list object.
      * @return a list of all divisions */
