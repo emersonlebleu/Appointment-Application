@@ -30,14 +30,23 @@ import java.io.*;
 
 /** Login Controller. */
 public class Login implements Initializable {
+    /** Username field. */
     public TextField usernameField;
+    /** Password field. */
     public TextField passwordField;
+    /** Login button. */
     public Button loginButton;
+    /** Username Label. */
     public Label usernameLabel;
+    /** Password label. */
     public Label passwordLabel;
+    /** Timezone label. */
     public Label tzLabel;
+    /** Language label. */
     public Label langLabel;
+    /** Timezone text content. */
     public Label tzText;
+    /** Language text content. */
     public Label langText;
     /** User object for the current session user. */
     public static model.User currUser;

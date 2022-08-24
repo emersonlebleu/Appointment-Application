@@ -22,21 +22,37 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/** Reports Controller. */
 public class Reports implements Initializable {
+    /** Tab for current user schedule report. */
     public Tab scheduleCurrUserTab;
+    /** Tab for number of appointments report. */
     public Tab numApptTab;
+    /** Tab for all contacts' schedules report. */
     public Tab scheduleContactTab;
+    /** Table for total by type */
     public TableView totalBType;
+    /** Table for total by month */
     public TableView totalBMonth;
+    /** Table for total by type and month */
     public TableView totalBTyMo;
+    /** Total by type type column. */
     public TableColumn tbtTypeCol;
+    /** Total by type appointment column. */
     public TableColumn tbtApptCol;
+    /** Total by month, month column. */
     public TableColumn tbmMonthCol;
+    /** Total by month appointment column. */
     public TableColumn tbmApptCol;
+    /** Text area for contacts schedule report */
     public TextArea contactSchedulesRep;
+    /** Text area for current user schedule report */
     public TextArea userScheduleRep;
+    /** Total by type and month, month column. */
     public TableColumn tbtmMonthCol;
+    /** Total by type and month type column. */
     public TableColumn tbtmTypeCol;
+    /** Total by type and month appointment column. */
     public TableColumn tbtmApptCol;
     /** A list to hold the total by month and type data. */
     private ObservableList<Report> tbtmData = FXCollections.observableArrayList();
