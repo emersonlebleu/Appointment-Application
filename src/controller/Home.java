@@ -109,7 +109,7 @@ public class Home implements Initializable {
 
         stage.show();
     }
-    /** Mouse over gets current style & changes color of button. */
+    /** Mouse over gets current style and changes color of button. */
     public void mouseOvAppt(MouseEvent mouseEvent) {
         startStyle = apptButton.getStyle();
         apptButton.setStyle("-fx-background-color: #2F334B;");
@@ -118,7 +118,7 @@ public class Home implements Initializable {
     public void mouseOutApt(MouseEvent mouseEvent) {
         apptButton.setStyle(startStyle);
     }
-    /** Mouse over gets current style & changes color of button. */
+    /** Mouse over gets current style and changes color of button. */
     public void mouseOvCust(MouseEvent mouseEvent) {
         startStyle = custButton.getStyle();
         custButton.setStyle("-fx-background-color: #2F334B;");
@@ -127,7 +127,7 @@ public class Home implements Initializable {
     public void mouseOutCust(MouseEvent mouseEvent) {
         custButton.setStyle(startStyle);
     }
-    /** Mouse over gets current style & changes color of button. */
+    /** Mouse over gets current style and changes color of button. */
     public void mouseOvReport(MouseEvent mouseEvent) {
         startStyle = reportButton.getStyle();
         reportButton.setStyle("-fx-background-color: #2F334B;");

@@ -29,7 +29,7 @@ public class Main extends Application {
 
         stage.show();
     }
-
+    /** Main entry point into the program. */
     public static void main(String[] args) {
 //        Locale.setDefault(new Locale("fr"));
         JDBC.connect();
