@@ -21,6 +21,8 @@ import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Customers implements Initializable {
     public StackPane custStack;
@@ -327,8 +329,11 @@ public class Customers implements Initializable {
         modCountryDropD.setItems(countries);
         modCountryDropD.setVisibleRowCount(5);
     }
-    /** Set divisions drop-downs on page */
+    /** LAMBDA FUNCTION PRESENT*** This overall function Set divisions drop-downs on page. The lambda function here allows this function to assign all divisions for which the
+     * country matches the selected country into an observable array list of the appropriate divisions for the selected countries. It has reduced the length of the
+     * block of code in this case moderately. */
     private void refreshDivisions(){
+        ObservableList<Division> matches;
         try {
             divisions = DivisionDAO.getAllDivisions();
 
@@ -339,17 +344,13 @@ public class Customers implements Initializable {
                 modFirstLevDropD.setItems(null);
                 modFirstLevDropD.setVisibleRowCount(5);
             } else if (!(divisions.size() == 0)) {
-                Iterator<Division> itr = divisions.iterator();
-                for (Iterator<Division> it = itr; it.hasNext();){
-                    Division division = it.next();
-                    if (!(division.getCountry() == selCountryId)){
-                        itr.remove();
-                    }
-                }
-                firstLevDropD.setItems(divisions);
+                // Lambda here***
+                matches = divisions.stream().filter(division -> division.getCountry() == selCountryId).collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+                firstLevDropD.setItems(matches);
                 firstLevDropD.setVisibleRowCount(5);
 
-                modFirstLevDropD.setItems(divisions);
+                modFirstLevDropD.setItems(matches);
                 modFirstLevDropD.setVisibleRowCount(5);
             } else {
                 firstLevDropD.setItems(null);

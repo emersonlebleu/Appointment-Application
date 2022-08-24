@@ -1,5 +1,6 @@
 package controller;
 
+import interfaces.Check;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -95,8 +96,8 @@ public class Appointments implements Initializable {
         Iterator<Appointment> itr = appointments.iterator();
 
         if (weekRadio != null && weekRadio.isSelected()){
-            for (Iterator<Appointment> it = itr; it.hasNext();) {
-                Appointment appointment = it.next();
+            for (; itr.hasNext();) {
+                Appointment appointment = itr.next();
                 switch (LocalDateTime.now().getDayOfWeek()){
                     case MONDAY:
                         if (appointment.getStart().isBefore(LocalDateTime.now().minusDays(1)) || appointment.getStart().isAfter(LocalDateTime.now().plusDays(5))){
@@ -177,7 +178,7 @@ public class Appointments implements Initializable {
         return times;
     }
     /** Set the times to an object to be used */
-    private ObservableList<LocalTime> times = createTimes();
+    private final ObservableList<LocalTime> times = createTimes();
     private ObservableList<Customer> customers;
     private ObservableList<User> users;
     private ObservableList<Contact> contacts;
@@ -269,14 +270,8 @@ public class Appointments implements Initializable {
         selectedAppointment = (Appointment) apptTable.getSelectionModel().getSelectedItem();
 
         if (selectedAppointment == null) {
-            //----------------No Selection Error--------------------//
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("No Selection");
-            alert.setHeaderText(null);
-            alert.initStyle(StageStyle.UTILITY);
-            alert.setContentText("Please make a selection.");
-
-            alert.showAndWait();
+            //USE OF CHECK******
+            check.popUp(Check.Type.ERROR, "No Selection", "Please make a selection");
         } else {
             refreshDropdowns();
             modIdField.setText(String.valueOf(selectedAppointment.getId()));
@@ -366,7 +361,7 @@ public class Appointments implements Initializable {
             notification.setTitle("Canceled Appointment");
             notification.setHeaderText(null);
             notification.initStyle(StageStyle.UTILITY);
-            notification.setContentText("Canceled Appointment Number: " + String.valueOf(selectedAppointment.getId()) + "\n" + "Type: " + selectedAppointment.getType());
+            notification.setContentText("Canceled Appointment Number: " + selectedAppointment.getId() + "\n" + "Type: " + selectedAppointment.getType());
 
             notification.showAndWait();
         }
@@ -802,5 +797,31 @@ public class Appointments implements Initializable {
             return errorM;
         }
     }
+    /** LAMBDA USED HERE*** This lambda passes the required parameters to the functional "check"
+     * interface method. This creates a "popup" alert of the type passed in with the title and message.
+     * This allows for the creation of a popup within the controller logic and
+     * shortens the within controller logic down considerably. You can see the difference as only
+     * the first call within the code uses the "check" rather than the written out alert
+     * functionality. */
+    Check check = (Check.Type type, String title, String message) -> {
+        if (type == Check.Type.ERROR){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.initStyle(StageStyle.UTILITY);
+            alert.setContentText(message);
 
+            alert.showAndWait();
+        } else if (type == Check.Type.CONFIRMATION) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            ButtonType buttonTypeYes = new ButtonType("Yes");
+            ButtonType buttonTypeNo = new ButtonType("No");
+
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+            Optional<ButtonType> result = alert.showAndWait();
+        }
+    };
 }

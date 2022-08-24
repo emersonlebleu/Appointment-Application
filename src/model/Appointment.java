@@ -1,5 +1,8 @@
 package model;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.StageStyle;
 import utilities.CurrentSession;
 
 import java.sql.Date;
@@ -7,6 +10,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /** Appointment Class for appointment object. */
 public class Appointment {
@@ -182,4 +186,5 @@ public class Appointment {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm zzz");
         return endFormat.format(formatter);
     }
+
 }
