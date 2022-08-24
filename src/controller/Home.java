@@ -70,8 +70,8 @@ public class Home implements Initializable {
         }
     }
 
-    /** Appointment button pressed. Brings appropriate frame to front, changes page label, sets
-     * button styles appropriately to display active current page via button color. */
+    /** Appointment button pressed. Reloads the view in order to reload all data in all tables/forms. Changes
+     * the state.infront variable to appointments in order to have the appointments pane be in front. */
     public void apptBtnPress(ActionEvent actionEvent) throws IOException {
         State.infront = "Appointments";
         Parent root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
@@ -83,8 +83,8 @@ public class Home implements Initializable {
 
         stage.show();
     }
-    /** Customers button pressed. Brings appropriate frame to front, changes page label, sets
-     * button styles appropriately to display active current page via button color. */
+    /** Customers button pressed. Reloads the view in order to reload all data in all tables/forms. Changes
+     * the state.infront variable to customers in order to have the appointments pane be in front. */
     public void custBtnPress(ActionEvent actionEvent) throws IOException {
         State.infront = "Customers";
         Parent root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
@@ -96,8 +96,8 @@ public class Home implements Initializable {
 
         stage.show();
     }
-    /** Report button pressed. Brings appropriate frame to front, changes page label, sets
-     * button styles appropriately to display active current page via button color. */
+    /** Report button pressed. Reloads the view in order to reload all data in all tables/forms. Changes
+     * the state.infront variable to reports in order to have the appointments pane be in front. */
     public void reportBtnPress(ActionEvent actionEvent) throws IOException {
         State.infront = "Reports";
         Parent root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
