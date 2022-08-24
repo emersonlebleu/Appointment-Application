@@ -27,55 +27,105 @@ import java.util.ResourceBundle;
 
 /** Appointments controller. Contains all methods for the appointments interface. */
 public class Appointments implements Initializable {
+    /** Table view for appointments. */
     public TableView apptTable;
+    /** Column id for appointments. */
     public TableColumn idCol;
+    /** Column title for appointments. */
     public TableColumn titleCol;
+    /** Column description for appointments. */
     public TableColumn descCol;
+    /** Column location for appointments. */
     public TableColumn locationCol;
+    /** Column type for appointments. */
     public TableColumn typeCol;
+    /** Column start for appointments. */
     public TableColumn startCol;
+    /** Column end for appointments. */
     public TableColumn endCol;
+    /** Column customer for appointments. */
     public TableColumn customerCol;
+    /** Column user for appointments. */
     public TableColumn userCol;
+    /** Column contact for appointments. */
     public TableColumn contactCol;
+    /** Button to appointment add */
     public Button addApptBtn;
+    /** Button to appointment modify */
     public Button modApptBtn;
+    /** Button to appointment delete */
     public Button delApptBtn;
+    /** Container for modify form */
     public AnchorPane modPane;
+    /** Container for add form */
     public AnchorPane addPane;
+    /** Stack for appointments panes */
     public StackPane apptStack;
+    /** Button to cancel add. */
     public Button cancelAdd;
+    /** Button to save add. */
     public Button saveAdd;
+    /** Id field for add pane. */
     public TextField idField;
+    /** Title field for add pane. */
     public TextField titleField;
+    /** Description field for add pane. */
     public TextField descriptionField;
+    /** Location field for add pane. */
     public TextField locationField;
+    /** Type field for add pane. */
     public TextField typeField;
+    /** Contact field for add pane. */
     public ComboBox<Contact> contactDropD;
+    /** Start date field for add pane. */
     public DatePicker startDateP;
+    /** End date field for add pane. */
     public DatePicker endDateP;
+    /** Customer field for add pane. */
     public ComboBox<Customer> custDropD;
+    /** User field for add pane. */
     public ComboBox<User> userDropD;
+    /** Start time field for add pane. */
     public ComboBox<LocalTime> addStartTime;
+    /** End time field for add pane. */
     public ComboBox<LocalTime> addEndTime;
+    /** Container home pane. */
     public AnchorPane homePane;
+    /** Id field for modify pane. */
     public TextField modIdField;
+    /** Title field for modify pane. */
     public TextField modTitleField;
+    /** Description field for modify pane. */
     public TextField modDescriptionField;
+    /** Location field for modify pane. */
     public TextField modLocationField;
+    /** Type field for modify pane. */
     public TextField modTypeField;
+    /** Start date field for modify pane. */
     public DatePicker modStartDateP;
+    /** End date field for modify pane. */
     public DatePicker modEndDateP;
+    /** Save button for mod pane. */
     public Button saveMod;
+    /** Cancel button for mod pane. */
     public Button cancelMod;
+    /** Contact field for modify pane. */
     public ComboBox<Contact> modContactDropD;
+    /** Start time field for modify pane. */
     public ComboBox<LocalTime> modStartTime;
+    /** End time field for modify pane. */
     public ComboBox<LocalTime> modEndTime;
+    /** Customer field for modify pane. */
     public ComboBox<Customer> modCustDropD;
+    /** User field for modify pane. */
     public ComboBox<User> modUserDropD;
+    /** Radio button for month selection. */
     public RadioButton monthRadio;
+    /** Radio button for week selection. */
     public RadioButton weekRadio;
+    /** Radio button for all selection. */
     public RadioButton allRadio;
+    /** Toggle group for view selection for table. */
     public ToggleGroup viewToggle;
 
     /** A variable to store the appointment selected in appointments table. */
