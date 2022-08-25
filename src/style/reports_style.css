@@ -1,3 +1,37 @@
 AnchorPane {
     -fx-background-color: #FFFCF7;
 }
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: #3F4464;
+    -fx-border-radius: 3px;
+}
+
+.table-view .column-header {
+    -fx-background-color: #3F4464;
+    -fx-border-color: #FFFCF7;
+    -fx-border-radius: 1px;
+    -fx-border-width: 1px;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #FFFCF7;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #FFFCF7;
+    -fx-font-weight: bold;
+}
+.tab {
+    -fx-background-color: #3F4464;
+}
+.tab-pane .tab:selected
+{
+    -fx-background-color: #555a7d;
+}
+
+.text-area {
+    -fx-border-color: #3F4464;
+    -fx-border-radius: 3px;
+}
