@@ -170,14 +170,14 @@ public class Appointment {
     public void setContact(Integer id){
         this.contact = id;
     }
-    /** Get the formatted start date & time.
-     * @return formatted start date & time. */
+    /** Get the formatted start date and  time.
+     * @return formatted start date and  time. */
     public String getStartFormat() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm zzz");
         return startFormat.format(formatter);
     }
-    /** Get the formatted end date & time.
-     * @return formatted end date & time. */
+    /** Get the formatted end date and time.
+     * @return formatted end date and  time. */
     public String getEndFormat() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm zzz");
         return endFormat.format(formatter);
