@@ -531,7 +531,7 @@ public class Appointments implements Initializable {
         }
         return times;
     }
-    /** Sets drop-downs on page. Fills customers, users, and contacts & sets the drop-downs to these lists. */
+    /** Sets drop-downs on page. Fills customers, users, and contacts and sets the drop-downs to these lists. */
     private void refreshDropdowns(){
         try {
             contacts = ContactDAO.getAllContacts();
