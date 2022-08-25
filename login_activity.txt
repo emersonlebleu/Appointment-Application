@@ -1,4 +1,0 @@
-
-Attempt with username: test at 2022-08-25T06:34:10.212790300 Status: SUCCESS
-Attempt with username: test at 2022-08-25T06:59:53.607893400 Status: SUCCESS
-Attempt with username: test at 2022-08-25T07:19:02.102734300 Status: SUCCESS
