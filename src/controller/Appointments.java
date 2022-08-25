@@ -405,7 +405,6 @@ public class Appointments implements Initializable {
             model.Appointment newAppt = new Appointment(id, title, description, location, type, start, end, customerId, userId, contactId);
             try {
                 AppointmentDAO.updateAppointment(newAppt);
-                System.out.println("Updated!");
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -721,7 +720,14 @@ public class Appointments implements Initializable {
                 ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
                 for (Appointment appointment: appointments){
                     if (appointment.getCustomer() == custDropD.getValue().getId()){
-                        if ((start.isBefore(appointment.getEnd()) && start.isAfter(appointment.getStart())) || (end.isAfter(appointment.getStart()) && end.isBefore(appointment.getEnd())) || (appointment.getEnd().isAfter(start) && appointment.getEnd().isBefore(end)) || (appointment.getStart().isAfter(start) && appointment.getStart().isBefore(end))) {
+                        if ((start.isBefore(appointment.getEnd()) && start.isAfter(appointment.getStart())) ||
+                                start.equals(appointment.getStart()) ||
+                                (end.isAfter(appointment.getStart()) && end.isBefore(appointment.getEnd())) ||
+                                end.equals(appointment.getEnd()) ||
+                                (appointment.getEnd().isAfter(start) && (appointment.getEnd().isBefore(end))) ||
+                                appointment.getEnd().equals(end) ||
+                                appointment.getStart().equals(start) ||
+                                (appointment.getStart().isAfter(start) && appointment.getStart().isBefore(end))) {
                             timeErrorM += "-Customer number: " + String.valueOf(appointment.getCustomer()) + " has a conflict from " + appointment.getStartFormat() + " to " + appointment.getEndFormat() + ".\n";
                             startDateP.setStyle("-fx-border-color: red");
                             addStartTime.setStyle("-fx-border-color: red");
@@ -871,7 +877,14 @@ public class Appointments implements Initializable {
                 ObservableList<Appointment> appointments = AppointmentDAO.getAllAppointments();
                 for (Appointment appointment: appointments){
                     if (appointment.getCustomer() == modCustDropD.getValue().getId() && appointment.getId() != Integer.parseInt(modIdField.getText())){
-                        if ((start.isBefore(appointment.getEnd()) && start.isAfter(appointment.getStart())) || (end.isAfter(appointment.getStart()) && end.isBefore(appointment.getEnd())) || (appointment.getEnd().isAfter(start) && appointment.getEnd().isBefore(end)) || (appointment.getStart().isAfter(start) && appointment.getStart().isBefore(end))) {
+                        if ((start.isBefore(appointment.getEnd()) && start.isAfter(appointment.getStart())) ||
+                                start.equals(appointment.getStart()) ||
+                                (end.isAfter(appointment.getStart()) && end.isBefore(appointment.getEnd())) ||
+                                end.equals(appointment.getEnd()) ||
+                                (appointment.getEnd().isAfter(start) && (appointment.getEnd().isBefore(end))) ||
+                                appointment.getEnd().equals(end) ||
+                                appointment.getStart().equals(start) ||
+                                (appointment.getStart().isAfter(start) && appointment.getStart().isBefore(end))) {
                             timeErrorM += "-Customer number: " + String.valueOf(appointment.getCustomer()) + " has a conflict from " + appointment.getStartFormat() + " to " + appointment.getEndFormat() + ".\n";
                             modStartDateP.setStyle("-fx-border-color: red");
                             modStartTime.setStyle("-fx-border-color: red");

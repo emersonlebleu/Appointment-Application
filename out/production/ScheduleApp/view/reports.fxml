@@ -11,13 +11,13 @@
 <AnchorPane prefHeight="553.0" prefWidth="663.0" stylesheets="@../style/reports_style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Reports">
     <children>
         <Label alignment="CENTER" layoutX="283.0" layoutY="191.0" prefHeight="17.0" prefWidth="101.0" text="reports" />
-      <TabPane prefHeight="553.0" prefWidth="663.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="553.0" prefWidth="663.0" stylesheets="@../style/reports_style.css" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab id="scheduleCurrUserTab" fx:id="scheduleCurrUserTab" text="Schedule for Current User">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextArea id="userScheduleRep" editable="false" fx:id="userScheduleRep" layoutX="69.0" layoutY="76.0" prefHeight="383.0" prefWidth="529.0" />
+                        <TextArea id="userScheduleRep" fx:id="userScheduleRep" editable="false" layoutX="69.0" layoutY="76.0" prefHeight="383.0" prefWidth="529.0" />
                      </children></AnchorPane>
               </content>
             </Tab>
@@ -55,7 +55,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextArea id="contactSchedulesRep" editable="false" fx:id="contactSchedulesRep" layoutX="70.0" layoutY="81.0" prefHeight="381.0" prefWidth="523.0" />
+                        <TextArea id="contactSchedulesRep" fx:id="contactSchedulesRep" editable="false" layoutX="70.0" layoutY="81.0" prefHeight="381.0" prefWidth="523.0" />
                      </children></AnchorPane>
             </content>
           </Tab>
